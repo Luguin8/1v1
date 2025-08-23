@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://dkpyay3pmuplq"]
+
+[ext_resource type="PackedScene" uid="uid://dgjwpe7p5vfql" path="res://Scenes/Player.tscn" id="1_bhm8u"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bhm8u"]
+size = Vector3(10, 0.1, 10)
+
+[sub_resource type="BoxMesh" id="BoxMesh_5ms4e"]
+size = Vector3(20, 0.2, 20)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bhm8u"]
+albedo_color = Color(0.234435, 0.645829, 0.270404, 1)
+
+[node name="TestLevel" type="Node3D"]
+
+[node name="Ground" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("BoxShape3D_bhm8u")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("BoxMesh_5ms4e")
+surface_material_override/0 = SubResource("StandardMaterial3D_bhm8u")
+
+[node name="Player" parent="." instance=ExtResource("1_bhm8u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.934204, 0.356738, 0, -0.356738, -0.934204, 1.05747, 6.03454, -5.8537)
+sky_mode = 1

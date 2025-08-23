@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://dgjwpe7p5vfql"]
+
+[ext_resource type="Script" uid="uid://dsd3snk82vmdb" path="res://Scenes/Player.gd" id="1_rpqav"]
+[ext_resource type="Script" uid="uid://dm865irlpowc7" path="res://Scenes/CameraController.gd" id="2_kyqiw"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_kyqiw"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_gntrk"]
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_rpqav")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_kyqiw")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_gntrk")
+
+[node name="CameraPivot" type="Node3D" parent="."]
+script = ExtResource("2_kyqiw")
+
+[node name="Camera3D" type="Camera3D" parent="CameraPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.25593, 0.816177, 2.5749)
+
+[node name="RayCastFloor" type="RayCast3D" parent="."]
+target_position = Vector3(0, -1.2, 0)

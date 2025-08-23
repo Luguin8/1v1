@@ -1,0 +1,10 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+.export/
+.import/
+.idea/
+.vscode/
+*.tmp
+*.import
+*.godot/
