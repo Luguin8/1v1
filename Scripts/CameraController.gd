@@ -1,15 +1,13 @@
 extends Node3D
 
-# Sensibilidad del mouse
 var sensitivity = 0.003
-
-# Limites verticales (en radianes)
 var min_pitch = -1.2
 var max_pitch = 1.2
 
-# Variables internas
-var yaw = 0
-var pitch = 0
+var yaw = 0.0
+var pitch = 0.0
+
+@onready var player = get_parent() # Asumo que CameraController está dentro del Player
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -19,4 +17,9 @@ func _unhandled_input(event):
 		yaw -= event.relative.x * sensitivity
 		pitch -= event.relative.y * sensitivity
 		pitch = clamp(pitch, min_pitch, max_pitch)
-		rotation = Vector3(pitch, yaw, 0)
+
+		# Solo afecta al pitch de la cámara
+		rotation.x = pitch
+
+		# El yaw se aplica al Player
+		player.rotation.y = yaw

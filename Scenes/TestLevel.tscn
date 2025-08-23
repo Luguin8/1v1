@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dkpyay3pmuplq"]
+[gd_scene load_steps=10 format=3 uid="uid://dkpyay3pmuplq"]
 
 [ext_resource type="PackedScene" uid="uid://dgjwpe7p5vfql" path="res://Scenes/Player.tscn" id="1_bhm8u"]
 [ext_resource type="PackedScene" uid="uid://bodiky2uavi68" path="res://Scenes/HUD.tscn" id="2_5ms4e"]
@@ -18,6 +18,8 @@ albedo_color = Color(0.234435, 0.645829, 0.270404, 1)
 [sub_resource type="GDScript" id="GDScript_oy2kj"]
 script/source = "extends MeshInstance3D
 "
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_shgkq"]
 
 [node name="TestLevel" type="Node3D"]
 
@@ -47,3 +49,6 @@ script = ExtResource("3_shgkq")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.0373)
 mesh = SubResource("CapsuleMesh_ujyaq")
 script = SubResource("GDScript_oy2kj")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="dummy"]
+shape = SubResource("CapsuleShape3D_shgkq")

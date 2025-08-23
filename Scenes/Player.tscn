@@ -1,17 +1,22 @@
-[gd_scene load_steps=6 format=3 uid="uid://dgjwpe7p5vfql"]
+[gd_scene load_steps=10 format=3 uid="uid://dgjwpe7p5vfql"]
 
 [ext_resource type="Script" uid="uid://dsd3snk82vmdb" path="res://Scripts/Player.gd" id="1_rpqav"]
 [ext_resource type="PackedScene" uid="uid://dd560m0yx0sh5" path="res://Assets/Models/low_poly_farmer_man.glb" id="2_gntrk"]
 [ext_resource type="Script" uid="uid://dm865irlpowc7" path="res://Scripts/CameraController.gd" id="2_kyqiw"]
-[ext_resource type="PackedScene" uid="uid://nc8xsj2kbjcw" path="res://Scenes/weapon.tscn" id="4_dewec"]
+[ext_resource type="Script" uid="uid://bnni7stslwevt" path="res://Scripts/Weapon.gd" id="4_52ee3"]
+[ext_resource type="PackedScene" uid="uid://c2m2xosexdg6d" path="res://Assets/Models/low_poly_ak12.glb" id="4_nn08x"]
+[ext_resource type="PackedScene" uid="uid://cv1a5vwmae8fi" path="res://Assets/Models/low_poly_sniper.glb" id="5_52ee3"]
+[ext_resource type="PackedScene" uid="uid://b701pask3h1ca" path="res://Assets/Models/katana_low_poly.glb" id="6_bhhdu"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_kyqiw"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bhhdu"]
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_rpqav")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0, 0)
 
 [node name="Sketchfab_Scene" parent="MeshInstance3D" instance=ExtResource("2_gntrk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
@@ -23,10 +28,35 @@ shape = SubResource("CapsuleShape3D_kyqiw")
 script = ExtResource("2_kyqiw")
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.25593, 0.816177, 2.5749)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.46556, 0.816177, 2.39173)
+fov = 81.5625
 
 [node name="RayCastFloor" type="RayCast3D" parent="."]
 target_position = Vector3(0, -1.2, 0)
 
-[node name="Weapon" parent="." instance=ExtResource("4_dewec")]
-transform = Transform3D(-1.31134e-08, 0, 0.3, 0, 0.3, 0, -0.3, 0, -1.31134e-08, 0.306066, 0, -0.122228)
+[node name="WeaponHolder" type="Node3D" parent="."]
+script = ExtResource("4_52ee3")
+
+[node name="RifleModel" type="MeshInstance3D" parent="WeaponHolder"]
+
+[node name="Sketchfab_Scene" parent="WeaponHolder/RifleModel" instance=ExtResource("4_nn08x")]
+transform = Transform3D(-1.31134e-08, 0, 0.3, 0, 0.3, 0, -0.3, 0, -1.31134e-08, 0.296331, 0.011196, 0.00521064)
+
+[node name="SniperModel" type="MeshInstance3D" parent="WeaponHolder"]
+
+[node name="Sketchfab_Scene" parent="WeaponHolder/SniperModel" instance=ExtResource("5_52ee3")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.269554, -0.011544, -0.326288)
+
+[node name="MeleeModel" type="MeshInstance3D" parent="WeaponHolder"]
+
+[node name="Sketchfab_Scene" parent="WeaponHolder/MeleeModel" instance=ExtResource("6_bhhdu")]
+transform = Transform3D(-0.02, 0, -1.74846e-09, 0, 0.02, 0, 1.74846e-09, 0, -0.02, 0.253392, 0, 0)
+
+[node name="RayCast3D" type="RayCast3D" parent="WeaponHolder"]
+target_position = Vector3(0, 0, -5)
+
+[node name="Area3D" type="Area3D" parent="WeaponHolder"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WeaponHolder/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.184513)
+shape = SubResource("BoxShape3D_bhhdu")

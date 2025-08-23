@@ -157,6 +157,11 @@ func _physics_process(delta):
 	# ====== Aplicar movimiento ======
 	move_and_slide()
 
+	# ====== Rotar Player según cámara ======
+	var target_rotation = rotation
+	target_rotation.y = camera_pivot.global_rotation.y
+	rotation = target_rotation
+
 	# ====== Parpadeo visual ======
 	if is_flashing:
 		flash_timer -= delta
