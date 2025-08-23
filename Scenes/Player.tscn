@@ -1,20 +1,23 @@
-[gd_scene load_steps=5 format=3 uid="uid://dgjwpe7p5vfql"]
+[gd_scene load_steps=6 format=3 uid="uid://dgjwpe7p5vfql"]
 
-[ext_resource type="Script" uid="uid://dsd3snk82vmdb" path="res://Scenes/Player.gd" id="1_rpqav"]
-[ext_resource type="Script" uid="uid://dm865irlpowc7" path="res://Scenes/CameraController.gd" id="2_kyqiw"]
+[ext_resource type="Script" uid="uid://dsd3snk82vmdb" path="res://Scripts/Player.gd" id="1_rpqav"]
+[ext_resource type="PackedScene" uid="uid://dd560m0yx0sh5" path="res://Assets/Models/low_poly_farmer_man.glb" id="2_gntrk"]
+[ext_resource type="Script" uid="uid://dm865irlpowc7" path="res://Scripts/CameraController.gd" id="2_kyqiw"]
+[ext_resource type="PackedScene" uid="uid://nc8xsj2kbjcw" path="res://Scenes/weapon.tscn" id="4_dewec"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_kyqiw"]
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_gntrk"]
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_rpqav")
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+
+[node name="Sketchfab_Scene" parent="MeshInstance3D" instance=ExtResource("2_gntrk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_kyqiw")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("CapsuleMesh_gntrk")
 
 [node name="CameraPivot" type="Node3D" parent="."]
 script = ExtResource("2_kyqiw")
@@ -24,3 +27,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.25593, 0.816177, 2.5749)
 
 [node name="RayCastFloor" type="RayCast3D" parent="."]
 target_position = Vector3(0, -1.2, 0)
+
+[node name="Weapon" parent="." instance=ExtResource("4_dewec")]
+transform = Transform3D(-1.31134e-08, 0, 0.3, 0, 0.3, 0, -0.3, 0, -1.31134e-08, 0.306066, 0, -0.122228)

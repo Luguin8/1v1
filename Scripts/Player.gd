@@ -1,5 +1,14 @@
 extends CharacterBody3D
 
+# ====== HUD ======
+@onready var hud = get_tree().current_scene.get_node("HUD")  # Ajusta si tu HUD no está en la raíz
+
+@onready var current_weapon : Node = $Weapon  # referencia al Weapon que el jugador tiene
+
+func _process(delta):
+	if Input.is_action_just_pressed("fire"):
+		current_weapon.fire()
+
 # ====== Configuración de movimiento ======
 var walk_speed = 3.5
 var run_speed = 7.0
@@ -44,6 +53,14 @@ var original_color = Color(1,1,1)
 # ====== Referencias ======
 @onready var camera_pivot = $CameraPivot
 
+func _ready():
+	# Asegurar que el MeshInstance3D tenga material_override
+	if not mesh_instance.material_override:
+		var mat = StandardMaterial3D.new()
+		mesh_instance.material_override = mat
+	
+	update_health_bar()  # Inicializa la barra de vida
+
 func _physics_process(delta):
 	var input_dir = Vector3.ZERO
 
@@ -56,7 +73,6 @@ func _physics_process(delta):
 		input_dir.x -= 1
 	if Input.is_action_pressed("move_right"):
 		input_dir.x += 1
-
 	input_dir = input_dir.normalized()
 
 	# ====== Daño por inactividad (AFK) ======
@@ -67,6 +83,7 @@ func _physics_process(delta):
 			health = max(health, 1)
 			is_flashing = true
 			flash_timer = damage_flash_time
+			update_health_bar()
 	else:
 		idle_timer = 0
 
@@ -155,3 +172,10 @@ func take_damage(amount: float):
 	health = max(health, 0)
 	is_flashing = true
 	flash_timer = damage_flash_time
+	update_health_bar()
+
+# ====== Actualizar barra de vida ======
+func update_health_bar():
+	if hud:
+		var bar = hud.get_node("ProgressBar")  # Nodo hijo ProgressBar
+		bar.value = health
