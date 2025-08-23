@@ -16,8 +16,8 @@ var dash_direction = Vector3.ZERO
 # ====== Crouch / Slide ======
 var is_crouching = false
 var is_sliding = false
-var crouch_height = 1.0       # Altura de collider al agacharse
-var stand_height = 2.0        # Altura normal del collider
+var crouch_height = 1.0
+var stand_height = 2.0
 var slide_speed = 15.0
 var slide_time = 0.4
 var slide_timer = 0.0
@@ -26,7 +26,22 @@ var slide_direction = Vector3.ZERO
 # ====== Saltos ======
 var can_double_jump = true
 
-# ====== Referencia a la cámara ======
+# ====== Vida / daño por inactividad ======
+var max_health = 100
+var health = max_health
+var idle_damage_per_second = 5.0
+var idle_timer = 0.0
+var idle_threshold = 2.0  # segundos para empezar daño por AFK
+
+# ====== Feedback visual ======
+@onready var mesh_instance = $MeshInstance3D
+var damage_flash_time = 0.2
+var flash_timer = 0.0
+var is_flashing = false
+var flash_color = Color(1,0,0)
+var original_color = Color(1,1,1)
+
+# ====== Referencias ======
 @onready var camera_pivot = $CameraPivot
 
 func _physics_process(delta):
@@ -43,6 +58,17 @@ func _physics_process(delta):
 		input_dir.x += 1
 
 	input_dir = input_dir.normalized()
+
+	# ====== Daño por inactividad (AFK) ======
+	if input_dir == Vector3.ZERO:
+		idle_timer += delta
+		if idle_timer >= idle_threshold:
+			health -= idle_damage_per_second * delta
+			health = max(health, 1)
+			is_flashing = true
+			flash_timer = damage_flash_time
+	else:
+		idle_timer = 0
 
 	# ====== Dash ======
 	if Input.is_action_just_pressed("dash") and not is_dashing and input_dir != Vector3.ZERO:
@@ -61,7 +87,6 @@ func _physics_process(delta):
 		# ====== Crouch / Slide ======
 		if Input.is_action_pressed("crouch"):
 			if Input.is_action_pressed("run") and input_dir != Vector3.ZERO and not is_sliding:
-				# Inicia slide
 				is_sliding = true
 				slide_timer = slide_time
 				var cam_forward = camera_pivot.global_transform.basis.z
@@ -70,7 +95,6 @@ func _physics_process(delta):
 				$CollisionShape3D.shape.height = crouch_height
 				is_crouching = false
 			elif not is_sliding:
-				# Solo agacharse
 				$CollisionShape3D.shape.height = crouch_height
 				is_crouching = true
 		else:
@@ -86,7 +110,7 @@ func _physics_process(delta):
 				is_sliding = false
 				$CollisionShape3D.shape.height = stand_height
 		else:
-			# ====== Movimiento normal relativo a la cámara ======
+			# ====== Movimiento normal ======
 			if input_dir != Vector3.ZERO:
 				var cam_forward = camera_pivot.global_transform.basis.z
 				var cam_right = camera_pivot.global_transform.basis.x
@@ -115,3 +139,19 @@ func _physics_process(delta):
 
 	# ====== Aplicar movimiento ======
 	move_and_slide()
+
+	# ====== Parpadeo visual ======
+	if is_flashing:
+		flash_timer -= delta
+		if flash_timer <= 0:
+			is_flashing = false
+			mesh_instance.material_override.albedo_color = original_color
+		else:
+			mesh_instance.material_override.albedo_color = flash_color
+
+# ====== Función para recibir daño desde enemigos ======
+func take_damage(amount: float):
+	health -= amount
+	health = max(health, 0)
+	is_flashing = true
+	flash_timer = damage_flash_time
