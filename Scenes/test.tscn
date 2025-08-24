@@ -1,0 +1,44 @@
+[gd_scene load_steps=8 format=3 uid="uid://c4fglhbpcuc72"]
+
+[ext_resource type="PackedScene" uid="uid://bvkpvxuesbgsp" path="res://assets juego/cobblestone_ground_-_lowpoly.glb" id="1_8od7v"]
+[ext_resource type="PackedScene" uid="uid://dgjwpe7p5vfql" path="res://Scenes/Player.tscn" id="2_8od7v"]
+[ext_resource type="PackedScene" uid="uid://bodiky2uavi68" path="res://Scenes/HUD.tscn" id="3_qc4db"]
+[ext_resource type="PackedScene" uid="uid://cxwfmv7wh2mg8" path="res://assets juego/free__dummy_model.glb" id="4_35xla"]
+[ext_resource type="Script" uid="uid://dehndvacvcd3q" path="res://Scripts/dummy.gd" id="5_i3aeo"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qc4db"]
+size = Vector3(1.21802, 0.476685, 1.16772)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_35xla"]
+
+[node name="Test" type="Node3D"]
+
+[node name="Sketchfab_Scene" parent="." instance=ExtResource("1_8od7v")]
+transform = Transform3D(10, 0, 0, 0, 2, 0, 0, 0, 7, 0, 0, 0)
+
+[node name="Piso" type="StaticBody3D" parent="Sketchfab_Scene"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Sketchfab_Scene/Piso"]
+transform = Transform3D(3, 0, 0, 0, 1, 0, 0, 0, 7, -0.0699463, 0.0432606, -0.175171)
+shape = SubResource("BoxShape3D_qc4db")
+
+[node name="Marker3D" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 23.419)
+
+[node name="Player" parent="." instance=ExtResource("2_8od7v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.59174, 2.27707)
+
+[node name="HUD" parent="." instance=ExtResource("3_qc4db")]
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+script = ExtResource("5_i3aeo")
+
+[node name="Sketchfab_Scene" parent="CharacterBody3D" instance=ExtResource("4_35xla")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.07049, -8.1826)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.17688, -8.11855)
+shape = SubResource("CapsuleShape3D_35xla")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.833886, 0.551937, 0, -0.551937, 0.833886, 0, 8.19027, 15.9404)
