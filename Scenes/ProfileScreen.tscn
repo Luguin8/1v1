@@ -28,14 +28,21 @@ text = "PERFIL"
 
 [node name="LineEdit" type="LineEdit" parent="."]
 layout_mode = 2
-offset_left = 59.0
-offset_top = 158.0
-offset_right = 279.0
-offset_bottom = 189.0
+offset_left = 84.0
+offset_top = 183.0
+offset_right = 152.563
+offset_bottom = 214.0
+scale = Vector2(1.12249, 1.12249)
+theme_override_font_sizes/font_size = 30
 placeholder_text = "Nombre"
 
-[node name="snapshotPlayer" type="MeshInstance3D" parent="."]
-skeleton = NodePath("")
+[node name="Confirm" type="Button" parent="."]
+layout_mode = 2
+offset_left = 165.0
+offset_top = 256.0
+offset_right = 252.0
+offset_bottom = 296.0
+text = "Confirmar"
 
 [node name="Estadisticas" type="Label" parent="."]
 layout_mode = 2
@@ -52,5 +59,12 @@ offset_top = 39.0
 offset_right = 1102.0
 offset_bottom = 70.0
 text = "Volver"
+
+[node name="NameChangedLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 107.0
+offset_top = 318.0
+offset_right = 147.0
+offset_bottom = 341.0
 
 [connection signal="pressed" from="Volver" to="." method="_on_volver_pressed"]

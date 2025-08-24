@@ -1,0 +1,108 @@
+[gd_scene load_steps=3 format=3 uid="uid://5ym5vc2btfp4"]
+
+[ext_resource type="Script" uid="uid://bfeeh1afyy2aa" path="res://Scripts/CharacterSelectScreen.gd" id="1_rt5im"]
+[ext_resource type="Texture2D" uid="uid://cvsghoayy6pbr" path="res://assets juego/assets_task_01k3d7ya6nf718nyk3rp64j64x_1756012509_img_1.webp" id="2_w0ted"]
+
+[node name="CharacterSelectScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_rt5im")
+
+[node name="Fondo" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(0.750162, 0.632088)
+texture = ExtResource("2_w0ted")
+
+[node name="Titulo" type="Label" parent="."]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 32.0
+offset_right = 615.0
+offset_bottom = 101.0
+theme_override_font_sizes/font_size = 50
+text = "Seleccion de personaje"
+
+[node name="PreviewContainer" type="SubViewportContainer" parent="."]
+layout_mode = 0
+offset_left = 210.0
+offset_top = 109.0
+offset_right = 722.0
+offset_bottom = 621.0
+
+[node name="PreviewViewport" type="SubViewport" parent="PreviewContainer"]
+transparent_bg = true
+handle_input_locally = false
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="PreviewContainer/PreviewViewport"]
+transform = Transform3D(1, 0, 0, 0, 0.987688, 0.156434, 0, -0.156434, 0.987688, 0.0583643, 1.20493, 1.38989)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="PreviewContainer/PreviewViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.16477, 2.82912)
+
+[node name="ModelHolder" type="Node3D" parent="PreviewContainer/PreviewViewport"]
+
+[node name="GridContainer" type="GridContainer" parent="."]
+layout_mode = 0
+offset_left = 125.0
+offset_top = 174.0
+offset_right = 202.0
+offset_bottom = 485.0
+
+[node name="Button1" type="Button" parent="GridContainer"]
+layout_mode = 2
+text = "Granjero"
+
+[node name="Button2" type="Button" parent="GridContainer"]
+layout_mode = 2
+text = "Ninja
+"
+
+[node name="Button3" type="Button" parent="GridContainer"]
+layout_mode = 2
+text = "3"
+
+[node name="Button4" type="Button" parent="GridContainer"]
+layout_mode = 2
+text = "4"
+
+[node name="Button5" type="Button" parent="GridContainer"]
+layout_mode = 2
+text = "5"
+
+[node name="Button6" type="Button" parent="GridContainer"]
+layout_mode = 2
+text = "6"
+
+[node name="Button7" type="Button" parent="GridContainer"]
+layout_mode = 2
+text = "7"
+
+[node name="Button8" type="Button" parent="GridContainer"]
+layout_mode = 2
+text = "8"
+
+[node name="Button9" type="Button" parent="GridContainer"]
+layout_mode = 2
+text = "9
+"
+
+[node name="Confirmar" type="Button" parent="."]
+layout_mode = 0
+offset_left = 118.0
+offset_top = 561.0
+offset_right = 205.0
+offset_bottom = 592.0
+text = "Confirmar"
+
+[node name="Volver" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1027.0
+offset_top = 566.0
+offset_right = 1084.0
+offset_bottom = 597.0
+text = "Volver"

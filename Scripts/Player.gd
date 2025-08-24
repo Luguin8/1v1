@@ -41,37 +41,103 @@ var idle_timer = 0.0
 var idle_threshold = 2.0  # segundos para empezar daño por AFK
 
 # ====== Feedback visual ======
-@onready var mesh_instance = $MeshInstance3D
 var damage_flash_time = 0.2
 var flash_timer = 0.0
 var is_flashing = false
 var flash_color = Color(1,0,0)
 var original_color = Color(1,1,1)
 
+var mesh_instance: MeshInstance3D = null  # Ahora apunta al MeshInstance3D real del modelo
+var current_model: Node3D = null          # Nodo raíz del modelo instanciado
+
 # ====== Referencias ======
 @onready var camera_pivot = $CameraPivot
 
+# ====== Skin del player ======
+var player_models = [
+	"res://assets/models/granjero.glb",
+	"res://assets/models/ninja.glb"
+]
+var selected_skin_index := 0
+
 # ====== READY ======
 func _ready():
-	# Inicializar material del mesh
-	if not mesh_instance.material_override:
-		var mat = StandardMaterial3D.new()
-		mesh_instance.material_override = mat
+	# Cargar skin guardada
+	load_selected_skin_from_file()
 
 	# Asignar WeaponHolder como current_weapon
 	current_weapon = weapon_holder
-	current_weapon.update_weapon()
-
-	# --- IMPORTANTE: asignar referencia del player al weapon ---
-	current_weapon.player_node = self
+	if current_weapon:
+		current_weapon.update_weapon()
+		current_weapon.player_node = self  # Referencia al player
 
 	update_health_bar()
+
+# ====== Función para obtener MeshInstance3D dentro del modelo ======
+func get_mesh_from_model(model: Node) -> MeshInstance3D:
+	if model is MeshInstance3D:
+		return model
+	for child in model.get_children():
+		var mesh = get_mesh_from_model(child)
+		if mesh:
+			return mesh
+	return null
+
+# ====== Función para cargar skin seleccionada ======
+func load_selected_skin(index := -1):
+	if index != -1:
+		selected_skin_index = index
+
+	# Limpiar modelo anterior
+	if current_model and current_model.is_inside_tree():
+		current_model.queue_free()
+		current_model = null
+		mesh_instance = null
+
+	var res = load(player_models[selected_skin_index])
+	if not res:
+		push_error("Modelo no encontrado: " + str(player_models[selected_skin_index]))
+		return
+
+	# Instanciar modelo
+	if res is PackedScene:
+		current_model = res.instantiate()
+	elif res is Node:
+		current_model = res.duplicate()
+	else:
+		push_error("El recurso no es un Node ni un PackedScene: " + str(player_models[selected_skin_index]))
+		return
+
+	# Agregar al Player
+	add_child(current_model)
+	current_model.name = "CurrentModel"
+
+	# Buscar MeshInstance3D dentro del modelo
+	mesh_instance = get_mesh_from_model(current_model)
+	if mesh_instance:
+		if not mesh_instance.material_override:
+			var mat = StandardMaterial3D.new()
+			mesh_instance.material_override = mat
+		mesh_instance.rotation_degrees = Vector3(0,0,0)
+		mesh_instance.transform.origin = Vector3(0,0,0)
+		mesh_instance.scale = Vector3(1,1,1)
+	else:
+		push_error("No se encontró MeshInstance3D dentro del modelo de la skin")
+
+# ====== Función para cargar skin guardada ======
+func load_selected_skin_from_file():
+	var cfg = ConfigFile.new()
+	if cfg.load("user://player.cfg") == OK:
+		var index = cfg.get_value("player","skin_index",0)
+		load_selected_skin(index)
+	else:
+		load_selected_skin(0)
 
 # ====== PHYSICS PROCESS ======
 func _physics_process(delta):
 	var input_dir = Vector3.ZERO
 
-	# ====== Movimiento input ======
+	# Movimiento
 	if Input.is_action_pressed("move_forward"):
 		input_dir.z -= 1
 	if Input.is_action_pressed("move_back"):
@@ -82,7 +148,7 @@ func _physics_process(delta):
 		input_dir.x += 1
 	input_dir = input_dir.normalized()
 
-	# ====== Daño por inactividad (AFK) ======
+	# Daño por inactividad
 	if input_dir == Vector3.ZERO:
 		idle_timer += delta
 		if idle_timer >= idle_threshold:
@@ -94,7 +160,7 @@ func _physics_process(delta):
 	else:
 		idle_timer = 0
 
-	# ====== Dash ======
+	# Dash
 	if Input.is_action_just_pressed("dash") and not is_dashing and input_dir != Vector3.ZERO:
 		is_dashing = true
 		dash_timer = dash_time
@@ -108,7 +174,7 @@ func _physics_process(delta):
 		if dash_timer <= 0:
 			is_dashing = false
 	else:
-		# ====== Crouch / Slide ======
+		# Crouch / Slide
 		if Input.is_action_pressed("crouch"):
 			if Input.is_action_pressed("run") and input_dir != Vector3.ZERO and not is_sliding:
 				is_sliding = true
@@ -126,7 +192,6 @@ func _physics_process(delta):
 				$CollisionShape3D.shape.height = stand_height
 				is_crouching = false
 
-		# ====== Aplicar slide ======
 		if is_sliding:
 			velocity = slide_direction * slide_speed
 			slide_timer -= delta
@@ -134,7 +199,6 @@ func _physics_process(delta):
 				is_sliding = false
 				$CollisionShape3D.shape.height = stand_height
 		else:
-			# ====== Movimiento normal ======
 			if input_dir != Vector3.ZERO:
 				var cam_forward = camera_pivot.global_transform.basis.z
 				var cam_right = camera_pivot.global_transform.basis.x
@@ -146,13 +210,13 @@ func _physics_process(delta):
 				velocity.x = 0
 				velocity.z = 0
 
-	# ====== Gravedad ======
+	# Gravedad
 	if not is_on_floor():
 		velocity.y -= gravity * delta
 	else:
 		velocity.y = 0
 
-	# ====== Saltos ======
+	# Saltos
 	if Input.is_action_just_pressed("jump"):
 		if is_on_floor():
 			velocity.y = jump_velocity
@@ -161,22 +225,24 @@ func _physics_process(delta):
 			velocity.y = jump_velocity
 			can_double_jump = false
 
-	# ====== Aplicar movimiento ======
+	# Aplicar movimiento
 	move_and_slide()
 
-	# ====== Rotar Player según cámara ======
+	# Rotar player según cámara
 	var target_rotation = rotation
 	target_rotation.y = camera_pivot.global_rotation.y
 	rotation = target_rotation
 
-	# ====== Parpadeo visual ======
+	# Parpadeo visual
 	if is_flashing:
 		flash_timer -= delta
 		if flash_timer <= 0:
 			is_flashing = false
-			mesh_instance.material_override.albedo_color = original_color
+			if mesh_instance:
+				mesh_instance.material_override.albedo_color = original_color
 		else:
-			mesh_instance.material_override.albedo_color = flash_color
+			if mesh_instance:
+				mesh_instance.material_override.albedo_color = flash_color
 
 # ====== FUNCION PARA DISPARO Y CAMBIO DE ARMAS ======
 func _process(delta):
@@ -204,3 +270,11 @@ func update_health_bar():
 	if hud:
 		var bar = hud.get_node("ProgressBar")
 		bar.value = health
+
+# ====== FUTURA LOGICA MULTIPLAYER ======
+# Comentado por ahora: la idea es sincronizar current_model y selected_skin_index
+# en los peers cuando se conecten. Se podría usar RPCs o MultiplayerAPI.
+# Ejemplo:
+# rpc("sync_skin", selected_skin_index)
+# func sync_skin(index):
+#     load_selected_skin(index)

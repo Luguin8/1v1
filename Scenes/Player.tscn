@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://dgjwpe7p5vfql"]
 
 [ext_resource type="Script" uid="uid://dsd3snk82vmdb" path="res://Scripts/Player.gd" id="1_rpqav"]
-[ext_resource type="PackedScene" uid="uid://dd560m0yx0sh5" path="res://Assets/Models/low_poly_farmer_man.glb" id="2_gntrk"]
+[ext_resource type="PackedScene" uid="uid://dd560m0yx0sh5" path="res://Assets/Models/granjero.glb" id="2_gntrk"]
 [ext_resource type="Script" uid="uid://dm865irlpowc7" path="res://Scripts/CameraController.gd" id="2_kyqiw"]
 [ext_resource type="Script" uid="uid://bnni7stslwevt" path="res://Scripts/Weapon.gd" id="4_52ee3"]
 [ext_resource type="PackedScene" uid="uid://c2m2xosexdg6d" path="res://Assets/Models/low_poly_ak12.glb" id="4_nn08x"]

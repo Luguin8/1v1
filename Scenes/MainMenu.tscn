@@ -23,15 +23,19 @@ stretch_mode = 4
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 0
-offset_left = 90.0
-offset_top = 301.0
-offset_right = 194.0
-offset_bottom = 472.0
+offset_left = 111.0
+offset_top = 278.0
+offset_right = 222.0
+offset_bottom = 484.0
 scale = Vector2(1.70329, 1.70329)
 
 [node name="Button" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 text = "Perfil"
+
+[node name="Button6" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Cambiar Skin"
 
 [node name="Button2" type="Button" parent="VBoxContainer"]
 layout_mode = 2
@@ -67,10 +71,11 @@ offset_left = 1045.0
 offset_top = 620.0
 offset_right = 1144.0
 offset_bottom = 669.0
-text = "Version 0.0.1
+text = "Version 0.0.2
 "
 
 [connection signal="pressed" from="VBoxContainer/Button" to="." method="_on_perfil_pressed"]
+[connection signal="pressed" from="VBoxContainer/Button6" to="." method="_on_skin_pressed"]
 [connection signal="pressed" from="VBoxContainer/Button2" to="." method="_on_entrenar_pressed"]
 [connection signal="pressed" from="VBoxContainer/Button3" to="." method="_on_jugar_online_pressed"]
 [connection signal="pressed" from="VBoxContainer/Button4" to="." method="_on_opciones_pressed"]
