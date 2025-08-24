@@ -58,10 +58,11 @@ var flash_color = Color(1,0,0)
 var original_color = Color(1,1,1)
 
 # =========================
-# Modelo 3D
+# Modelo 3D / Skin
 # =========================
 var current_model: Node3D = null
 var mesh_instance: MeshInstance3D = null
+var selected_skin_index: int = 0   # índice de skin elegida
 
 # =========================
 # Referencias
@@ -73,25 +74,79 @@ var collision_shape: CollisionShape3D = null
 # READY
 # =========================
 func _ready():
+	# Cargar skin_index guardado en disco
+	var config := ConfigFile.new()
+	var err := config.load("user://player.cfg")
+	if err == OK:
+		selected_skin_index = config.get_value("player", "skin_index", 0)
+	else:
+		selected_skin_index = 0
+
+	apply_skin(selected_skin_index)
+
+	# Weapon system
 	if weapon_holder:
 		current_weapon = weapon_holder
 		current_weapon.update_weapon()
 		current_weapon.player_node = self
 
-	current_model = $ModelHolder if has_node("ModelHolder") else null
-	if current_model:
-		mesh_instance = get_mesh_from_model(current_model)
-		if mesh_instance and not mesh_instance.material_override:
-			mesh_instance.material_override = StandardMaterial3D.new()
-		camera_pivot = $camerapivot
-		if not camera_pivot:
-			push_error("CameraPivot no encontrado en PlayerBase!")
+	# Referencias
+	camera_pivot = $camerapivot
+	if not camera_pivot:
+		push_error("CameraPivot no encontrado en PlayerBase!")
 
 	collision_shape = $CollisionShape3D
 	if not collision_shape:
 		push_error("CollisionShape3D no encontrado en PlayerBase!")
 
 	update_health_bar()
+
+# =========================
+# Aplicar Skin
+# =========================
+func apply_skin(index: int) -> void:
+	selected_skin_index = index
+
+	# Eliminar modelo anterior
+	if current_model and is_instance_valid(current_model):
+		current_model.queue_free()
+		current_model = null
+
+	# Verificar que GameData exista
+	if not Engine.has_singleton("GameData"):
+		push_error("GameData autoload no está cargado")
+		return
+
+	var game_data = Engine.get_singleton("GameData")
+	if index < 0 or index >= game_data.player_models.size():
+		push_error("Skin index inválido: %s" % index)
+		return
+
+	var path: String = game_data.player_models[index]
+	var resource := load(path)
+	if resource == null:
+		push_error("No se pudo cargar skin en " + str(path))
+		return
+
+	# Instanciar modelo
+	var instance: Node3D
+	if resource is PackedScene:
+		instance = (resource as PackedScene).instantiate() as Node3D
+	else:
+		push_error("El recurso no es una PackedScene")
+		return
+
+	# Montar dentro de ModelHolder
+	var holder := $ModelHolder if has_node("ModelHolder") else null
+	if holder:
+		holder.add_child(instance)
+		current_model = instance
+		current_model.transform.origin = Vector3.ZERO
+
+		# Buscar un Mesh para aplicar flashes de daño
+		mesh_instance = get_mesh_from_model(current_model)
+		if mesh_instance and not mesh_instance.material_override:
+			mesh_instance.material_override = StandardMaterial3D.new()
 
 # Función recursiva para mesh
 func get_mesh_from_model(model: Node) -> MeshInstance3D:
@@ -202,6 +257,7 @@ func _physics_process(delta):
 		flash_timer -= delta
 		mesh_instance.material_override.albedo_color = flash_color if flash_timer > 0 else original_color
 		is_flashing = flash_timer > 0
+
 # =========================
 # PROCESS: armas
 # =========================

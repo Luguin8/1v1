@@ -16,6 +16,10 @@ run/main_scene="uid://b44h5y2qlqjca"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="uid://de4xlmul2pfrm"
 
+[autoload]
+
+GameData="*res://GameData.gd"
+
 [input]
 
 move_forward={

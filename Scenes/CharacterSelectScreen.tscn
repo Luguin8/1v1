@@ -12,8 +12,8 @@ script = ExtResource("1_rt5im")
 
 [node name="Fondo" type="TextureRect" parent="."]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 1536.0
+offset_bottom = 1024.0
 scale = Vector2(0.750162, 0.632088)
 texture = ExtResource("2_w0ted")
 
@@ -28,11 +28,12 @@ text = "Seleccion de personaje"
 
 [node name="PreviewContainer" type="SubViewportContainer" parent="."]
 layout_mode = 0
-offset_left = 401.0
-offset_top = 128.0
-offset_right = 913.0
-offset_bottom = 640.0
+offset_left = 396.0
+offset_top = 79.0
+offset_right = 908.0
+offset_bottom = 591.0
 scale = Vector2(0.836736, 0.836736)
+mouse_filter = 2
 
 [node name="PreviewViewport" type="SubViewport" parent="PreviewContainer"]
 transparent_bg = true
@@ -41,18 +42,19 @@ render_target_update_mode = 4
 
 [node name="Camera3D" type="Camera3D" parent="PreviewContainer/PreviewViewport"]
 transform = Transform3D(1, 0, 0, 0, 0.987688, 0.156434, 0, -0.156434, 0.987688, 0.0583643, 1.24748, 1.38989)
+fov = 100.1
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="PreviewContainer/PreviewViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.16477, 2.82912)
 
 [node name="ModelHolder" type="Node3D" parent="PreviewContainer/PreviewViewport"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.850998, 0)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.408079, 0)
 
 [node name="GridContainer" type="GridContainer" parent="."]
 layout_mode = 0
 offset_left = 125.0
 offset_top = 174.0
-offset_right = 202.0
+offset_right = 248.0
 offset_bottom = 485.0
 
 [node name="Button1" type="Button" parent="GridContainer"]
@@ -103,7 +105,19 @@ text = "Confirmar"
 [node name="Volver" type="Button" parent="."]
 layout_mode = 0
 offset_left = 1027.0
-offset_top = 566.0
+offset_top = 61.0
 offset_right = 1084.0
-offset_bottom = 597.0
+offset_bottom = 92.0
 text = "Volver"
+
+[node name="Rotar" type="Button" parent="."]
+layout_mode = 0
+offset_left = 893.0
+offset_top = 533.0
+offset_right = 944.0
+offset_bottom = 564.0
+text = "Rotar
+"
+
+[connection signal="pressed" from="Confirmar" to="." method="_on_confirm_pressed"]
+[connection signal="pressed" from="Volver" to="." method="_on_volver_pressed"]
