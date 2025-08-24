@@ -102,10 +102,13 @@ func shoot_ray():
 	if not camera:
 		return
 
-	var from = camera.global_transform.origin
-	var to = from + camera.global_transform.basis.z * 1000.0
-	var space_state = get_world_3d().direct_space_state
+	# --- Calcular dirección desde el centro de la pantalla (crosshair) ---
+	var viewport = get_viewport()
+	var screen_center = viewport.get_visible_rect().size / 2
+	var from = camera.project_ray_origin(screen_center)
+	var to = from + camera.project_ray_normal(screen_center) * 1000.0
 
+	var space_state = get_world_3d().direct_space_state
 	var ray_params = PhysicsRayQueryParameters3D.new()
 	ray_params.from = from
 	ray_params.to = to
@@ -113,6 +116,7 @@ func shoot_ray():
 
 	var result = space_state.intersect_ray(ray_params)
 
+	# --- Muzzle flash en la posición del arma ---
 	if muzzle_flash_scene:
 		var flash = muzzle_flash_scene.instantiate()
 		add_child(flash)
@@ -121,6 +125,7 @@ func shoot_ray():
 		flash.emitting = true
 		flash.queue_free()
 
+	# --- Aplicar daño si hay colisión ---
 	if result:
 		var target = result.collider
 		if target != get_parent() and target.has_method("take_damage"):
@@ -131,7 +136,7 @@ func shoot_ray():
 				var attacker_name = get_parent().name
 				var victim_name = target.name
 				var weapon_name = weapon_type_to_string(weapon_type)
-				if hud:
+				if hud and hud.has_method("add_killfeed_message"):
 					hud.add_killfeed_message(attacker_name, weapon_name, victim_name)
 
 func swing_melee():
