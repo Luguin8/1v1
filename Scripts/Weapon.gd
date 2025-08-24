@@ -19,8 +19,13 @@ var can_fire = true
 var cooldown_timer = 0.0
 
 # =========================
-# ALMACENAMIENTO DE BALAS POR ARMA
+# RECARGA
+var is_reloading = false
+var reload_time = 2.0
+var reload_timer = 0.0
+
 # =========================
+# ALMACENAMIENTO DE BALAS POR ARMA
 var ammo_dict = {
 	WeaponType.SNIPER: 5,
 	WeaponType.RIFLE: 30,
@@ -29,52 +34,50 @@ var ammo_dict = {
 
 # =========================
 # REFERENCIAS
-# =========================
-@onready var raycast = $RayCast3D
-@onready var melee_area = $Area3D
+@onready var raycast : RayCast3D = $RayCast3D
+@onready var melee_area : Area3D = $Area3D
 
-@onready var rifle_model = $RifleModel
-@onready var sniper_model = $SniperModel
-@onready var melee_model = $MeleeModel
+@onready var rifle_model : MeshInstance3D = $RifleModel
+@onready var sniper_model : MeshInstance3D = $SniperModel
+@onready var melee_model : MeshInstance3D = $MeleeModel
 
 @export var muzzle_flash_scene: PackedScene
 @export var impact_particles_scene: PackedScene
 
+@onready var camera: Camera3D = get_parent().get_node("CameraPivot/Camera3D")
+@onready var hud = get_tree().current_scene.get_node("HUD")
+
 # =========================
 # READY
-# =========================
 func _ready():
 	set_process(true)
 	update_weapon()
 	print("Weapon listo:", weapon_type, "Ammo:", current_ammo)
 
 # =========================
-# PROCESS PARA COOLDOWN
-# =========================
+# PROCESS
 func _process(delta):
-	# Cambio de arma por teclado
-	if Input.is_action_just_pressed("weapon_sniper"):
-		switch_weapon(WeaponType.SNIPER)
-	elif Input.is_action_just_pressed("weapon_rifle"):
-		switch_weapon(WeaponType.RIFLE)
-	elif Input.is_action_just_pressed("weapon_melee"):
-		switch_weapon(WeaponType.MELEE)
-
-	# Cooldown
 	if not can_fire:
 		cooldown_timer -= delta
 		if cooldown_timer <= 0:
 			can_fire = true
 			cooldown_timer = 0
 
+	if is_reloading:
+		reload_timer -= delta
+		if reload_timer <= 0:
+			is_reloading = false
+			current_ammo = max_ammo
+			ammo_dict[weapon_type] = current_ammo
+			update_hud_ammo()
+
 # =========================
 # FUNCION PRINCIPAL DE DISPARO
-# =========================
 func fire():
-	if not can_fire:
+	if is_reloading or not can_fire:
 		return
 	if weapon_type != WeaponType.MELEE and current_ammo <= 0:
-		print("Sin munición")
+		start_reload()
 		return
 
 	can_fire = false
@@ -83,6 +86,9 @@ func fire():
 	if weapon_type != WeaponType.MELEE:
 		current_ammo -= 1
 		ammo_dict[weapon_type] = current_ammo
+		update_hud_ammo()
+		if current_ammo <= 0:
+			start_reload()
 
 	match weapon_type:
 		WeaponType.RIFLE, WeaponType.SNIPER:
@@ -92,52 +98,62 @@ func fire():
 
 # =========================
 # FUNCIONES DE DISPARO
-# =========================
 func shoot_ray():
-	# Muzzle flash
+	if not camera:
+		return
+
+	var from = camera.global_transform.origin
+	var to = from + camera.global_transform.basis.z * 1000.0
+	var space_state = get_world_3d().direct_space_state
+
+	var ray_params = PhysicsRayQueryParameters3D.new()
+	ray_params.from = from
+	ray_params.to = to
+	ray_params.exclude = [get_parent()]
+
+	var result = space_state.intersect_ray(ray_params)
+
 	if muzzle_flash_scene:
 		var flash = muzzle_flash_scene.instantiate()
-		raycast.add_child(flash)
-		flash.global_transform = raycast.global_transform
+		add_child(flash)
+		flash.global_transform.origin = raycast.global_transform.origin
 		flash.one_shot = true
 		flash.emitting = true
 		flash.queue_free()
 
-	# Raycast
-	if raycast.is_colliding():
-		var target = raycast.get_collider()
-		var impact_pos = raycast.get_collision_point()
-		
-		# Impact particles
-		if impact_particles_scene:
-			var impact = impact_particles_scene.instantiate()
-			get_tree().current_scene.add_child(impact)
-			impact.global_transform.origin = impact_pos
-			impact.one_shot = true
-			impact.emitting = true
-			impact.queue_free()
-		
-		if target.has_method("take_damage"):
+	if result:
+		var target = result.collider
+		if target != get_parent() and target.has_method("take_damage"):
 			target.take_damage(damage)
-	else:
-		print("No colisiona con nada")
+
+			# --- KILLFEED: solo si muere ---
+			if target.health <= 0:
+				var attacker_name = get_parent().name
+				var victim_name = target.name
+				var weapon_name = weapon_type_to_string(weapon_type)
+				if hud:
+					hud.add_killfeed_message(attacker_name, weapon_name, victim_name)
 
 func swing_melee():
 	for body in melee_area.get_overlapping_bodies():
-		if body.has_method("take_damage"):
+		if body != get_parent() and body.has_method("take_damage"):
 			body.take_damage(damage)
+
+			# --- KILLFEED: solo si muere ---
+			if body.health <= 0:
+				var attacker_name = get_parent().name
+				var victim_name = body.name
+				var weapon_name = weapon_type_to_string(weapon_type)
+				if hud:
+					hud.add_killfeed_message(attacker_name, weapon_name, victim_name)
 
 # =========================
 # CAMBIO DE ARMA
-# =========================
 func switch_weapon(new_type: int):
 	if weapon_type == new_type:
 		return
-	# Guardar munición actual
 	if weapon_type != WeaponType.MELEE:
 		ammo_dict[weapon_type] = current_ammo
-
-	# Cambiar arma
 	weapon_type = new_type
 	update_weapon()
 
@@ -156,13 +172,42 @@ func update_weapon():
 			cooldown = 0.5
 			max_ammo = -1
 
-	# Restaurar munición guardada
 	if weapon_type != WeaponType.MELEE:
 		current_ammo = ammo_dict[weapon_type]
 	else:
 		current_ammo = -1
 
-	# Actualizar modelos
-	rifle_model.visible = weapon_type == WeaponType.RIFLE
-	sniper_model.visible = weapon_type == WeaponType.SNIPER
-	melee_model.visible = weapon_type == WeaponType.MELEE
+	if rifle_model:
+		rifle_model.visible = weapon_type == WeaponType.RIFLE
+	if sniper_model:
+		sniper_model.visible = weapon_type == WeaponType.SNIPER
+	if melee_model:
+		melee_model.visible = weapon_type == WeaponType.MELEE
+
+	update_hud_ammo()
+
+# =========================
+# RECARGA
+func start_reload():
+	is_reloading = true
+	reload_timer = reload_time
+
+func update_hud_ammo():
+	if hud:
+		var ammo_label = hud.get_node("AmmoLabel")
+		if ammo_label:
+			if weapon_type == WeaponType.MELEE:
+				ammo_label.text = "-"
+			else:
+				ammo_label.text = str(current_ammo) + " / " + str(max_ammo)
+
+# =========================
+# AUX: Convertir WeaponType a nombre
+func weapon_type_to_string(type):
+	match type:
+		WeaponType.RIFLE:
+			return "Rifle"
+		WeaponType.SNIPER:
+			return "Sniper"
+		WeaponType.MELEE:
+			return "Melee"

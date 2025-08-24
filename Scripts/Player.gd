@@ -3,11 +3,9 @@ extends CharacterBody3D
 # ====== HUD ======
 @onready var hud = get_tree().current_scene.get_node("HUD")  # Ajusta si tu HUD no está en la raíz
 
-@onready var current_weapon : Node = $Weapon  # referencia al Weapon que el jugador tiene
-
-func _process(delta):
-	if Input.is_action_just_pressed("fire"):
-		current_weapon.fire()
+# ====== Weapon / WeaponHolder ======
+@onready var weapon_holder = $WeaponHolder
+var current_weapon : Node = null  # Apuntará al WeaponHolder completo
 
 # ====== Configuración de movimiento ======
 var walk_speed = 3.5
@@ -53,14 +51,21 @@ var original_color = Color(1,1,1)
 # ====== Referencias ======
 @onready var camera_pivot = $CameraPivot
 
+# ====== READY ======
 func _ready():
-	# Asegurar que el MeshInstance3D tenga material_override
+	# Inicializar material del mesh
 	if not mesh_instance.material_override:
 		var mat = StandardMaterial3D.new()
 		mesh_instance.material_override = mat
-	
-	update_health_bar()  # Inicializa la barra de vida
 
+	# Asignar WeaponHolder como current_weapon
+	current_weapon = weapon_holder
+
+	# Activar primera arma y ocultar las demás (solo visual)
+	current_weapon.update_weapon()  # WeaponHolder tiene Weapon.gd
+	update_health_bar()
+
+# ====== PHYSICS PROCESS ======
 func _physics_process(delta):
 	var input_dir = Vector3.ZERO
 
@@ -171,7 +176,20 @@ func _physics_process(delta):
 		else:
 			mesh_instance.material_override.albedo_color = flash_color
 
-# ====== Función para recibir daño desde enemigos ======
+# ====== FUNCION PARA DISPARO Y CAMBIO DE ARMAS ======
+func _process(delta):
+	if current_weapon:
+		if Input.is_action_just_pressed("fire"):
+			current_weapon.fire()  # Ahora apunta al WeaponHolder, correcto
+
+	# Cambio de armas usando WeaponHolder
+	if Input.is_action_just_pressed("weapon_rifle"):
+		current_weapon.switch_weapon(2)  # Indices según Weapon.gd
+	elif Input.is_action_just_pressed("weapon_sniper"):
+		current_weapon.switch_weapon(1)
+	elif Input.is_action_just_pressed("weapon_melee"):
+		current_weapon.switch_weapon(3)
+
 func take_damage(amount: float):
 	health -= amount
 	health = max(health, 0)
@@ -179,8 +197,7 @@ func take_damage(amount: float):
 	flash_timer = damage_flash_time
 	update_health_bar()
 
-# ====== Actualizar barra de vida ======
 func update_health_bar():
 	if hud:
-		var bar = hud.get_node("ProgressBar")  # Nodo hijo ProgressBar
+		var bar = hud.get_node("ProgressBar")
 		bar.value = health

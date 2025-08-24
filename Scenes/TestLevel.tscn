@@ -51,4 +51,5 @@ mesh = SubResource("CapsuleMesh_ujyaq")
 script = SubResource("GDScript_oy2kj")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="dummy"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00396013, 0.013865, -12.0584)
 shape = SubResource("CapsuleShape3D_shgkq")
