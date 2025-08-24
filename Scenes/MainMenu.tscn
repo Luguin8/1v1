@@ -1,0 +1,77 @@
+[gd_scene load_steps=4 format=3 uid="uid://b44h5y2qlqjca"]
+
+[ext_resource type="Script" uid="uid://dhky0713jjln1" path="res://Scripts/MainMenu.gd" id="1_853f1"]
+[ext_resource type="Texture2D" uid="uid://cnb0qdxxdcqf4" path="res://assets juego/assets_task_01k3d5myk1esf94mh5hqsmdyry_1756010108_img_1.webp" id="1_tt5f1"]
+[ext_resource type="Texture2D" uid="uid://de4xlmul2pfrm" path="res://assets juego/ICONO.png" id="3_8saeu"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_853f1")
+
+[node name="Fondo" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(0.749741, 0.632574)
+texture = ExtResource("1_tt5f1")
+stretch_mode = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 90.0
+offset_top = 301.0
+offset_right = 194.0
+offset_bottom = 472.0
+scale = Vector2(1.70329, 1.70329)
+
+[node name="Button" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Perfil"
+
+[node name="Button2" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Entrenar"
+
+[node name="Button3" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Jugar Online
+"
+
+[node name="Button4" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Opciones"
+
+[node name="Button5" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Salir
+"
+
+[node name="Icono" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 889.0
+offset_top = 8.0
+offset_right = 929.0
+offset_bottom = 48.0
+scale = Vector2(5.23612, 5.23612)
+texture = ExtResource("3_8saeu")
+expand_mode = 1
+
+[node name="Version" type="Label" parent="."]
+layout_mode = 0
+offset_left = 1045.0
+offset_top = 620.0
+offset_right = 1144.0
+offset_bottom = 669.0
+text = "Version 0.0.1
+"
+
+[connection signal="pressed" from="VBoxContainer/Button" to="." method="_on_perfil_pressed"]
+[connection signal="pressed" from="VBoxContainer/Button2" to="." method="_on_entrenar_pressed"]
+[connection signal="pressed" from="VBoxContainer/Button3" to="." method="_on_jugar_online_pressed"]
+[connection signal="pressed" from="VBoxContainer/Button4" to="." method="_on_opciones_pressed"]
+[connection signal="pressed" from="VBoxContainer/Button5" to="." method="_on_salir_pressed"]

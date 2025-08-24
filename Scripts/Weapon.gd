@@ -47,6 +47,9 @@ var ammo_dict = {
 @onready var camera: Camera3D = get_parent().get_node("CameraPivot/Camera3D")
 @onready var hud = get_tree().current_scene.get_node("HUD")
 
+# NUEVO: referencia al Player
+var player_node : Node = null
+
 # =========================
 # READY
 func _ready():
@@ -111,11 +114,11 @@ func shoot_ray():
 	var ray_params = PhysicsRayQueryParameters3D.new()
 	ray_params.from = from
 	ray_params.to = to
-	ray_params.exclude = [get_parent()]
+	ray_params.exclude = [player_node]  # Usar player real
 
 	var result = space_state.intersect_ray(ray_params)
 
-	# --- Muzzle flash en la posición del arma ---
+	# --- Muzzle flash ---
 	if muzzle_flash_scene:
 		var flash = muzzle_flash_scene.instantiate()
 		add_child(flash)
@@ -124,46 +127,42 @@ func shoot_ray():
 		flash.emitting = true
 		flash.queue_free()
 
-	# --- Aplicar daño si hay colisión ---
+	# --- Aplicar daño ---
 	if result:
 		var target = result.collider
-		if target != get_parent() and target.has_method("take_damage"):
+		if target != player_node and target.has_method("take_damage"):
 			target.take_damage(damage)
 
-			# --- Mostrar HIT siempre que dañe ---
+			# --- Mostrar HIT ---
 			if hud and hud.has_method("show_hitmarker"):
 				hud.show_hitmarker()
 
-			# --- KILLFEED y KILLMARKER si muere ---
-			if target.health <= 0:
-				var attacker_name = get_parent().name
+			# --- KILLFEED ---
+			if target.health <= 0 and hud:
+				var attacker_name = player_node.player_name if player_node and player_node.has_method("player_name") else player_node.name
 				var victim_name = target.name
 				var weapon_name = weapon_type_to_string(weapon_type)
-				if hud:
-					if hud.has_method("add_killfeed_message"):
-						hud.add_killfeed_message(attacker_name, weapon_name, victim_name)
-					if hud.has_method("show_killmarker"):
-						hud.show_killmarker()
+				hud.add_killfeed_message(weapon_name, victim_name, attacker_name)
+				if hud.has_method("show_killmarker"):
+					hud.show_killmarker()
 
 func swing_melee():
 	for body in melee_area.get_overlapping_bodies():
-		if body != get_parent() and body.has_method("take_damage"):
+		if body != player_node and body.has_method("take_damage"):
 			body.take_damage(damage)
 
 			# --- Mostrar HIT ---
 			if hud and hud.has_method("show_hitmarker"):
 				hud.show_hitmarker()
 
-			# --- KILLFEED y KILLMARKER ---
-			if body.health <= 0:
-				var attacker_name = get_parent().name
+			# --- KILLFEED ---
+			if body.health <= 0 and hud:
+				var attacker_name = player_node.player_name if player_node and player_node.has_method("player_name") else player_node.name
 				var victim_name = body.name
 				var weapon_name = weapon_type_to_string(weapon_type)
-				if hud:
-					if hud.has_method("add_killfeed_message"):
-						hud.add_killfeed_message(attacker_name, weapon_name, victim_name)
-					if hud.has_method("show_killmarker"):
-						hud.show_killmarker()
+				hud.add_killfeed_message(weapon_name, victim_name, attacker_name)
+				if hud.has_method("show_killmarker"):
+					hud.show_killmarker()
 
 # =========================
 # CAMBIO DE ARMA

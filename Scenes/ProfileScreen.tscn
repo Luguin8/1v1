@@ -1,0 +1,56 @@
+[gd_scene load_steps=3 format=3 uid="uid://b7wrnnjk0m4jp"]
+
+[ext_resource type="Script" uid="uid://bf4e38o7qmhy8" path="res://Scripts/ProfileScreen.gd" id="1_r6fif"]
+[ext_resource type="Texture2D" uid="uid://dcxf00wm6h6dp" path="res://assets juego/assets_task_01k3d7ya6nf718nyk3rp64j64x_1756012509_img_0.webp" id="1_yfwcv"]
+
+[node name="ProfileScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_r6fif")
+
+[node name="Fondo" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(0.748906, 0.633252)
+texture = ExtResource("1_yfwcv")
+
+[node name="Perfil del Jugador" type="Label" parent="."]
+layout_mode = 2
+offset_left = 65.0
+offset_top = 46.0
+offset_right = 225.0
+offset_bottom = 115.0
+theme_override_font_sizes/font_size = 50
+text = "PERFIL"
+
+[node name="LineEdit" type="LineEdit" parent="."]
+layout_mode = 2
+offset_left = 59.0
+offset_top = 158.0
+offset_right = 279.0
+offset_bottom = 189.0
+placeholder_text = "Nombre"
+
+[node name="snapshotPlayer" type="MeshInstance3D" parent="."]
+skeleton = NodePath("")
+
+[node name="Estadisticas" type="Label" parent="."]
+layout_mode = 2
+offset_left = 62.0
+offset_top = 560.0
+offset_right = 282.0
+offset_bottom = 583.0
+text = "Estadisticas (Proximamente)"
+
+[node name="Volver" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1045.0
+offset_top = 39.0
+offset_right = 1102.0
+offset_bottom = 70.0
+text = "Volver"
+
+[connection signal="pressed" from="Volver" to="." method="_on_volver_pressed"]

@@ -1,7 +1,7 @@
 extends CharacterBody3D
 
 # ====== HUD ======
-@onready var hud = get_tree().current_scene.get_node("HUD")  # Ajusta si tu HUD no está en la raíz
+@onready var hud = get_tree().current_scene.get_node("HUD")
 
 # ====== Weapon / WeaponHolder ======
 @onready var weapon_holder = $WeaponHolder
@@ -60,9 +60,11 @@ func _ready():
 
 	# Asignar WeaponHolder como current_weapon
 	current_weapon = weapon_holder
+	current_weapon.update_weapon()
 
-	# Activar primera arma y ocultar las demás (solo visual)
-	current_weapon.update_weapon()  # WeaponHolder tiene Weapon.gd
+	# --- IMPORTANTE: asignar referencia del player al weapon ---
+	current_weapon.player_node = self
+
 	update_health_bar()
 
 # ====== PHYSICS PROCESS ======
@@ -180,16 +182,17 @@ func _physics_process(delta):
 func _process(delta):
 	if current_weapon:
 		if Input.is_action_just_pressed("fire"):
-			current_weapon.fire()  # Ahora apunta al WeaponHolder, correcto
+			current_weapon.fire()
 
 	# Cambio de armas usando WeaponHolder
 	if Input.is_action_just_pressed("weapon_rifle"):
-		current_weapon.switch_weapon(2)  # Indices según Weapon.gd
+		current_weapon.switch_weapon(2)
 	elif Input.is_action_just_pressed("weapon_sniper"):
 		current_weapon.switch_weapon(1)
 	elif Input.is_action_just_pressed("weapon_melee"):
 		current_weapon.switch_weapon(3)
 
+# ====== VIDA ======
 func take_damage(amount: float):
 	health -= amount
 	health = max(health, 0)

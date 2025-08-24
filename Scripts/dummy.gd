@@ -4,9 +4,12 @@ var health = 100
 var max_health = 100
 var respawn_time = 5.0
 var start_position
+var hud  # referencia al HUD
 
 func _ready():
 	start_position = global_transform.origin
+	# Referencia al HUD
+	hud = get_tree().current_scene.get_node("HUD")
 
 func take_damage(amount):
 	health -= amount
@@ -15,6 +18,9 @@ func take_damage(amount):
 		print("Dummy muerto")
 		hide()               # Oculta el dummy
 		set_process(false)   # Detiene procesos
+		# Mostrar killfeed usando el jugador local
+		if hud:
+			hud.add_killfeed_message("Rifle", name)
 		# Espera 5 segundos antes de respawnear
 		await get_tree().create_timer(respawn_time).timeout
 		respawn()
