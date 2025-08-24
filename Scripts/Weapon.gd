@@ -102,7 +102,6 @@ func shoot_ray():
 	if not camera:
 		return
 
-	# --- Calcular dirección desde el centro de la pantalla (crosshair) ---
 	var viewport = get_viewport()
 	var screen_center = viewport.get_visible_rect().size / 2
 	var from = camera.project_ray_origin(screen_center)
@@ -131,26 +130,40 @@ func shoot_ray():
 		if target != get_parent() and target.has_method("take_damage"):
 			target.take_damage(damage)
 
-			# --- KILLFEED: solo si muere ---
+			# --- Mostrar HIT siempre que dañe ---
+			if hud and hud.has_method("show_hitmarker"):
+				hud.show_hitmarker()
+
+			# --- KILLFEED y KILLMARKER si muere ---
 			if target.health <= 0:
 				var attacker_name = get_parent().name
 				var victim_name = target.name
 				var weapon_name = weapon_type_to_string(weapon_type)
-				if hud and hud.has_method("add_killfeed_message"):
-					hud.add_killfeed_message(attacker_name, weapon_name, victim_name)
+				if hud:
+					if hud.has_method("add_killfeed_message"):
+						hud.add_killfeed_message(attacker_name, weapon_name, victim_name)
+					if hud.has_method("show_killmarker"):
+						hud.show_killmarker()
 
 func swing_melee():
 	for body in melee_area.get_overlapping_bodies():
 		if body != get_parent() and body.has_method("take_damage"):
 			body.take_damage(damage)
 
-			# --- KILLFEED: solo si muere ---
+			# --- Mostrar HIT ---
+			if hud and hud.has_method("show_hitmarker"):
+				hud.show_hitmarker()
+
+			# --- KILLFEED y KILLMARKER ---
 			if body.health <= 0:
 				var attacker_name = get_parent().name
 				var victim_name = body.name
 				var weapon_name = weapon_type_to_string(weapon_type)
 				if hud:
-					hud.add_killfeed_message(attacker_name, weapon_name, victim_name)
+					if hud.has_method("add_killfeed_message"):
+						hud.add_killfeed_message(attacker_name, weapon_name, victim_name)
+					if hud.has_method("show_killmarker"):
+						hud.show_killmarker()
 
 # =========================
 # CAMBIO DE ARMA

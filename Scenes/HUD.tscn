@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://bodiky2uavi68"]
 
-[ext_resource type="Script" uid="uid://cmdy61gm83wcl" path="res://Scenes/Hud.gd" id="1_jo1ms"]
+[ext_resource type="Script" uid="uid://cmdy61gm83wcl" path="res://Scripts/Hud.gd" id="1_jo1ms"]
 [ext_resource type="Texture2D" uid="uid://dxus7w4qhjfw6" path="res://assets juego/Sin título-1.png" id="1_sd512"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_entsu"]
@@ -50,3 +50,22 @@ anchor_right = 1.0
 offset_left = -40.0
 offset_bottom = 40.0
 grow_horizontal = 0
+
+[node name="HitMarkerLabel" type="Label" parent="."]
+visible = false
+offset_left = 919.0
+offset_top = 280.0
+offset_right = 963.0
+offset_bottom = 349.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 50
+text = "\"\""
+
+[node name="KillMarkerLabel" type="Label" parent="."]
+visible = false
+offset_left = 539.0
+offset_top = 376.0
+offset_right = 579.0
+offset_bottom = 399.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+text = "\"\""
