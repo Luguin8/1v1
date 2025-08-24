@@ -28,10 +28,11 @@ text = "Seleccion de personaje"
 
 [node name="PreviewContainer" type="SubViewportContainer" parent="."]
 layout_mode = 0
-offset_left = 210.0
-offset_top = 109.0
-offset_right = 722.0
-offset_bottom = 621.0
+offset_left = 401.0
+offset_top = 128.0
+offset_right = 913.0
+offset_bottom = 640.0
+scale = Vector2(0.836736, 0.836736)
 
 [node name="PreviewViewport" type="SubViewport" parent="PreviewContainer"]
 transparent_bg = true
@@ -39,12 +40,13 @@ handle_input_locally = false
 render_target_update_mode = 4
 
 [node name="Camera3D" type="Camera3D" parent="PreviewContainer/PreviewViewport"]
-transform = Transform3D(1, 0, 0, 0, 0.987688, 0.156434, 0, -0.156434, 0.987688, 0.0583643, 1.20493, 1.38989)
+transform = Transform3D(1, 0, 0, 0, 0.987688, 0.156434, 0, -0.156434, 0.987688, 0.0583643, 1.24748, 1.38989)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="PreviewContainer/PreviewViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.16477, 2.82912)
 
 [node name="ModelHolder" type="Node3D" parent="PreviewContainer/PreviewViewport"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.850998, 0)
 
 [node name="GridContainer" type="GridContainer" parent="."]
 layout_mode = 0
@@ -55,12 +57,11 @@ offset_bottom = 485.0
 
 [node name="Button1" type="Button" parent="GridContainer"]
 layout_mode = 2
-text = "Granjero"
+text = "PlayerBase"
 
 [node name="Button2" type="Button" parent="GridContainer"]
 layout_mode = 2
-text = "Ninja
-"
+text = "Proximamente"
 
 [node name="Button3" type="Button" parent="GridContainer"]
 layout_mode = 2
