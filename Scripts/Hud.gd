@@ -3,7 +3,9 @@ extends CanvasLayer  # Script del HUD
 @onready var killfeed_container = $KillFeedContainer
 @export var killfeed_duration := 3.0  # segundos que dura cada mensaje
 @onready var hit_marker_label = $HitMarkerLabel
-@onready var kill_marker_label = $KillMarkerLabel  # NUEVO
+@onready var kill_marker_label = $KillMarkerLabel  
+@onready var dash_label = $DashLabel
+@onready var slide_label = $SlideLabel
 
 var player_name = "Jugador"  # Nombre del jugador local
 
@@ -51,3 +53,12 @@ func add_killfeed_message(weapon_name: String, victim_name: String, attacker_nam
 	timer.autostart = true
 	timer.connect("timeout", Callable(label, "queue_free"))
 	add_child(timer)
+
+# --- Actualizar texto de cooldowns ---
+func update_dash_cd(on_cd: bool) -> void:
+	if dash_label:
+		dash_label.text = "Dash en CD" if on_cd else ""
+
+func update_slide_cd(on_cd: bool) -> void:
+	if slide_label:
+		slide_label.text = "Slide en CD" if on_cd else ""

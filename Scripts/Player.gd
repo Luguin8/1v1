@@ -26,6 +26,11 @@ var is_dashing = false
 var dash_timer = 0.0
 var dash_direction = Vector3.ZERO
 
+# Cooldowns (dash)
+var dash_cooldown = 2.0
+var dash_cooldown_timer = 0.0
+var is_dash_on_cd = false
+
 # Crouch / Slide
 var is_crouching = false
 var is_sliding = false
@@ -35,6 +40,11 @@ var slide_speed = 15.0
 var slide_time = 0.4
 var slide_timer = 0.0
 var slide_direction = Vector3.ZERO
+
+# Cooldowns (slide)
+var slide_cooldown = 2.0
+var slide_cooldown_timer = 0.0
+var is_slide_on_cd = false
 
 # Saltos
 var can_double_jump = true
@@ -184,13 +194,17 @@ func _physics_process(delta):
 	else:
 		idle_timer = 0
 
-	# Dash
-	if Input.is_action_just_pressed("dash") and not is_dashing and input_dir != Vector3.ZERO:
+	# Dash (con cooldown)
+	if Input.is_action_just_pressed("dash") and not is_dashing and not is_dash_on_cd and input_dir != Vector3.ZERO:
 		is_dashing = true
 		dash_timer = dash_time
 		var forward = transform.basis.z
 		var right = transform.basis.x
 		dash_direction = (forward * input_dir.z + right * input_dir.x).normalized()
+
+		# Activar cooldown
+		is_dash_on_cd = true
+		dash_cooldown_timer = dash_cooldown
 
 	if is_dashing:
 		velocity.x = dash_direction.x * dash_speed
@@ -201,7 +215,7 @@ func _physics_process(delta):
 	else:
 		# Crouch / Slide
 		if Input.is_action_pressed("crouch"):
-			if Input.is_action_pressed("run") and input_dir != Vector3.ZERO and not is_sliding:
+			if Input.is_action_pressed("run") and input_dir != Vector3.ZERO and not is_sliding and not is_slide_on_cd:
 				is_sliding = true
 				slide_timer = slide_time
 				var forward = transform.basis.z
@@ -209,6 +223,10 @@ func _physics_process(delta):
 				slide_direction = (forward * input_dir.z + right * input_dir.x).normalized()
 				if collision_shape: collision_shape.shape.height = crouch_height
 				is_crouching = false
+
+				# Activar cooldown
+				is_slide_on_cd = true
+				slide_cooldown_timer = slide_cooldown
 			elif not is_sliding and collision_shape:
 				collision_shape.shape.height = crouch_height
 				is_crouching = true
@@ -252,6 +270,24 @@ func _physics_process(delta):
 	# Aplicar movimiento
 	move_and_slide()
 
+	# Reducir cooldowns
+	if is_dash_on_cd:
+		dash_cooldown_timer -= delta
+		if dash_cooldown_timer <= 0:
+			is_dash_on_cd = false
+			dash_cooldown_timer = 0.0
+
+	if is_slide_on_cd:
+		slide_cooldown_timer -= delta
+		if slide_cooldown_timer <= 0:
+			is_slide_on_cd = false
+			slide_cooldown_timer = 0.0
+
+# Actualizar HUD con cooldowns
+	if hud:
+		hud.update_dash_cd(is_dash_on_cd)
+		hud.update_slide_cd(is_slide_on_cd)
+
 	# Flash visual
 	if is_flashing and mesh_instance:
 		flash_timer -= delta
@@ -267,6 +303,8 @@ func _process(delta):
 		if Input.is_action_just_pressed("weapon_rifle"): current_weapon.switch_weapon(2)
 		elif Input.is_action_just_pressed("weapon_sniper"): current_weapon.switch_weapon(1)
 		elif Input.is_action_just_pressed("weapon_melee"): current_weapon.switch_weapon(3)
+
+	# (HUD updates para labels se agregan después en la siguiente etapa)
 
 # =========================
 # VIDA

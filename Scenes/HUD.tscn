@@ -69,3 +69,15 @@ offset_right = 579.0
 offset_bottom = 399.0
 theme_override_colors/font_color = Color(1, 0, 0, 1)
 text = "\"\""
+
+[node name="DashLabel" type="Label" parent="."]
+offset_left = 563.0
+offset_top = 542.0
+offset_right = 603.0
+offset_bottom = 565.0
+
+[node name="SlideLabel" type="Label" parent="."]
+offset_left = 563.0
+offset_top = 587.0
+offset_right = 603.0
+offset_bottom = 610.0
