@@ -188,7 +188,7 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("dash") and not is_dashing and input_dir != Vector3.ZERO:
 		is_dashing = true
 		dash_timer = dash_time
-		var forward = -transform.basis.z
+		var forward = transform.basis.z
 		var right = transform.basis.x
 		dash_direction = (forward * input_dir.z + right * input_dir.x).normalized()
 
@@ -204,7 +204,7 @@ func _physics_process(delta):
 			if Input.is_action_pressed("run") and input_dir != Vector3.ZERO and not is_sliding:
 				is_sliding = true
 				slide_timer = slide_time
-				var forward = -transform.basis.z
+				var forward = transform.basis.z
 				var right = transform.basis.x
 				slide_direction = (forward * input_dir.z + right * input_dir.x).normalized()
 				if collision_shape: collision_shape.shape.height = crouch_height
