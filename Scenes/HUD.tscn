@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://bodiky2uavi68"]
+[gd_scene load_steps=6 format=3 uid="uid://bodiky2uavi68"]
 
 [ext_resource type="Script" uid="uid://cmdy61gm83wcl" path="res://Scripts/Hud.gd" id="1_jo1ms"]
 [ext_resource type="Texture2D" uid="uid://dxus7w4qhjfw6" path="res://assets juego/Sin título-1.png" id="1_sd512"]
+[ext_resource type="Texture2D" uid="uid://b33vl5v3vkv44" path="res://assets juego/meleecross.png" id="3_psnte"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_entsu"]
 bg_color = Color(0.243569, 0.243569, 0.243569, 1)
@@ -42,6 +43,20 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_sd512")
+
+[node name="MeleeCrosshair" type="TextureRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_psnte")
 
 [node name="KillFeedContainer" type="VBoxContainer" parent="."]
 anchors_preset = 1

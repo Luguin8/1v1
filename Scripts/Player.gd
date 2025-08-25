@@ -76,13 +76,17 @@ var selected_skin_index: int = 0   # índice de skin elegida
 
 # =========================
 # Referencias
-# =========================
 var camera_pivot: Node3D = null
 var collision_shape: CollisionShape3D = null
 
 # =========================
-# READY
+# Apuntar con sniper / crosshair
+var is_aiming = false
+var default_fov = 70.0
+var aim_fov = 70.0   # Mismo FOV que normal, solo zoom de posición
+
 # =========================
+# READY
 func _ready():
 	# Cargar skin_index guardado en disco
 	var config := ConfigFile.new()
@@ -101,7 +105,7 @@ func _ready():
 		current_weapon.player_node = self
 
 	# Referencias
-	camera_pivot = $camerapivot
+	camera_pivot = $CameraPivot
 	if not camera_pivot:
 		push_error("CameraPivot no encontrado en PlayerBase!")
 
@@ -169,7 +173,7 @@ func get_mesh_from_model(model: Node) -> MeshInstance3D:
 	return null
 
 # =========================
-# PHYSICS PROCESS CORREGIDO
+# PHYSICS PROCESS
 # =========================
 func _physics_process(delta):
 	if not collision_shape:
@@ -201,8 +205,6 @@ func _physics_process(delta):
 		var forward = transform.basis.z
 		var right = transform.basis.x
 		dash_direction = (forward * input_dir.z + right * input_dir.x).normalized()
-
-		# Activar cooldown
 		is_dash_on_cd = true
 		dash_cooldown_timer = dash_cooldown
 
@@ -223,8 +225,6 @@ func _physics_process(delta):
 				slide_direction = (forward * input_dir.z + right * input_dir.x).normalized()
 				if collision_shape: collision_shape.shape.height = crouch_height
 				is_crouching = false
-
-				# Activar cooldown
 				is_slide_on_cd = true
 				slide_cooldown_timer = slide_cooldown
 			elif not is_sliding and collision_shape:
@@ -283,7 +283,7 @@ func _physics_process(delta):
 			is_slide_on_cd = false
 			slide_cooldown_timer = 0.0
 
-# Actualizar HUD con cooldowns
+	# Actualizar HUD con cooldowns
 	if hud:
 		hud.update_dash_cd(is_dash_on_cd)
 		hud.update_slide_cd(is_slide_on_cd)
@@ -294,6 +294,36 @@ func _physics_process(delta):
 		mesh_instance.material_override.albedo_color = flash_color if flash_timer > 0 else original_color
 		is_flashing = flash_timer > 0
 
+	# =========================
+	# Manejar apuntado sniper
+	# =========================
+	if current_weapon:
+		if current_weapon.weapon_type == current_weapon.WeaponType.SNIPER:
+			is_aiming = Input.is_action_pressed("aim")
+		else:
+			is_aiming = false
+
+	# =========================
+	# Manejar crosshair según arma
+	# =========================
+	if hud:
+		var crosshair = hud.get_node_or_null("Crosshair")
+		var melee_crosshair = hud.get_node_or_null("MeleeCrosshair")
+		if crosshair:
+			match current_weapon.weapon_type:
+				current_weapon.WeaponType.SNIPER:
+					crosshair.visible = is_aiming
+					if melee_crosshair:
+						melee_crosshair.visible = false
+				current_weapon.WeaponType.RIFLE:
+					crosshair.visible = true
+					if melee_crosshair:
+						melee_crosshair.visible = false
+				current_weapon.WeaponType.MELEE:
+					crosshair.visible = false
+					if melee_crosshair:
+						melee_crosshair.visible = true
+
 # =========================
 # PROCESS: armas
 # =========================
@@ -303,8 +333,6 @@ func _process(delta):
 		if Input.is_action_just_pressed("weapon_rifle"): current_weapon.switch_weapon(2)
 		elif Input.is_action_just_pressed("weapon_sniper"): current_weapon.switch_weapon(1)
 		elif Input.is_action_just_pressed("weapon_melee"): current_weapon.switch_weapon(3)
-
-	# (HUD updates para labels se agregan después en la siguiente etapa)
 
 # =========================
 # VIDA

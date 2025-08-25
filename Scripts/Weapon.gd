@@ -7,7 +7,6 @@ enum WeaponType { SNIPER = 1, RIFLE = 2, MELEE = 3 }
 
 # =========================
 # PROPIEDADES
-# =========================
 @export var weapon_type: WeaponType = WeaponType.RIFLE
 
 var damage: float
@@ -49,6 +48,9 @@ var ammo_dict = {
 
 # NUEVO: referencia al Player
 var player_node : Node = null
+
+# FOV para apuntado (consistente con player.gd)
+var aim_fov: float = 70.0
 
 # =========================
 # READY
@@ -114,7 +116,7 @@ func shoot_ray():
 	var ray_params = PhysicsRayQueryParameters3D.new()
 	ray_params.from = from
 	ray_params.to = to
-	ray_params.exclude = [player_node]  # Usar player real
+	ray_params.exclude = [player_node]  # Excluir player
 
 	var result = space_state.intersect_ray(ray_params)
 
