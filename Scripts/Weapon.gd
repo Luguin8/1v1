@@ -44,7 +44,11 @@ var ammo_dict = {
 @export var impact_particles_scene: PackedScene
 
 @onready var camera: Camera3D = get_parent().get_node("CameraPivot/Camera3D")
-@onready var hud = get_tree().current_scene.get_node("HUD")
+@onready var hud: Node = (
+	get_tree().current_scene.get_node("HUD") 
+	if get_tree().current_scene.has_node("HUD") 
+	else null
+)
 
 # NUEVO: referencia al Player
 var player_node : Node = null

@@ -1,21 +1,21 @@
 [gd_scene load_steps=3 format=3 uid="uid://5ym5vc2btfp4"]
 
-[ext_resource type="Script" uid="uid://bfeeh1afyy2aa" path="res://Scripts/CharacterSelectScreen.gd" id="1_rt5im"]
-[ext_resource type="Texture2D" uid="uid://cvsghoayy6pbr" path="res://assets juego/assets_task_01k3d7ya6nf718nyk3rp64j64x_1756012509_img_1.webp" id="2_w0ted"]
+[ext_resource type="Script" uid="uid://bfeeh1afyy2aa" path="res://Scenes/CharacterSelectScreen/CharacterSelectScreen.gd" id="1_u3rd5"]
+[ext_resource type="Texture2D" uid="uid://cvsghoayy6pbr" path="res://assets juego/assets_task_01k3d7ya6nf718nyk3rp64j64x_1756012509_img_1.webp" id="2_yvspx"]
 
 [node name="CharacterSelectScreen" type="Control"]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-script = ExtResource("1_rt5im")
+script = ExtResource("1_u3rd5")
 
 [node name="Fondo" type="TextureRect" parent="."]
 layout_mode = 0
 offset_right = 1536.0
 offset_bottom = 1024.0
 scale = Vector2(0.750162, 0.632088)
-texture = ExtResource("2_w0ted")
+texture = ExtResource("2_yvspx")
 
 [node name="Titulo" type="Label" parent="."]
 layout_mode = 0
@@ -41,8 +41,8 @@ handle_input_locally = false
 render_target_update_mode = 4
 
 [node name="Camera3D" type="Camera3D" parent="PreviewContainer/PreviewViewport"]
-transform = Transform3D(1, 0, 0, 0, 0.987688, 0.156434, 0, -0.156434, 0.987688, 0.0583643, 1.24748, 1.38989)
-fov = 100.1
+transform = Transform3D(0.999981, 0.000974707, -0.00615408, 0, 0.987688, 0.156434, 0.00623079, -0.156431, 0.987669, 0, 0.813, 1.39)
+fov = 90.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="PreviewContainer/PreviewViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.16477, 2.82912)

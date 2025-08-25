@@ -1,17 +1,6 @@
-[gd_scene load_steps=17 format=4 uid="uid://baqqkmcba4eof"]
+[gd_scene load_steps=8 format=4 uid="uid://c53c1ssitvf57"]
 
-[ext_resource type="Script" uid="uid://dsd3snk82vmdb" path="res://Scripts/Player.gd" id="1_vwpgr"]
-[ext_resource type="Script" uid="uid://dm865irlpowc7" path="res://Scripts/CameraController.gd" id="3_lkj05"]
-[ext_resource type="Script" uid="uid://bnni7stslwevt" path="res://Scripts/Weapon.gd" id="4_bxa8e"]
-[ext_resource type="PackedScene" uid="uid://c2m2xosexdg6d" path="res://Assets/Models/low_poly_ak12.glb" id="5_fdb16"]
-[ext_resource type="PackedScene" uid="uid://cv1a5vwmae8fi" path="res://Assets/Models/low_poly_sniper.glb" id="6_5wh0k"]
-[ext_resource type="PackedScene" uid="uid://b701pask3h1ca" path="res://Assets/Models/katana_low_poly.glb" id="7_dxga8"]
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_kyqiw"]
-height = 2.38214
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_bhhdu"]
-size = Vector3(1, 1, 1.62109)
+[ext_resource type="Script" uid="uid://b3if3bxmvds5a" path="res://Scenes/Player/PlayerModel.gd" id="1_hyrdf"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n7efa"]
 resource_name = "playerbase"
@@ -19,7 +8,7 @@ vertex_color_use_as_albedo = true
 albedo_color = Color(0.927533, 0.820409, 0.746445, 1)
 emission_enabled = true
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_jlunn"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_hyrdf"]
 resource_name = "playerbase"
 _surfaces = [{
 "aabb": AABB(-6.38737, -0.00693741, -1.03703, 12.7747, 19.2004, 5.14446),
@@ -39,7 +28,7 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 
-[sub_resource type="Skin" id="Skin_vwpgr"]
+[sub_resource type="Skin" id="Skin_pwkit"]
 resource_name = "Skin"
 bind_count = 52
 bind/0/name = &"pelvis"
@@ -204,7 +193,7 @@ resource_name = "high-poly"
 vertex_color_use_as_albedo = true
 emission_enabled = true
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_m767r"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_qarfo"]
 resource_name = "high-poly"
 _surfaces = [{
 "aabb": AABB(-0.485897, 17.8601, 1.30759, 0.971794, 0.325808, 0.274524),
@@ -224,86 +213,15 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 
-[sub_resource type="Skin" id="Skin_lkj05"]
+[sub_resource type="Skin" id="Skin_t8xl6"]
 resource_name = "Skin2"
 bind_count = 1
 bind/0/name = &"head"
 bind/0/bone = -1
 bind/0/pose = Transform3D(1, 0, 0, 0, 1, 0.0007318, 0, -0.0007318, 1, 0, -17.604, -0.467612)
 
-[sub_resource type="Animation" id="Animation_jlunn"]
-resource_name = "pasos"
-tracks/0/type = "position_3d"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("ModelHolder/Skeleton3D/playerbaseMesh")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = PackedFloat32Array()
-tracks/1/type = "position_3d"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("ModelHolder/Skeleton3D")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = PackedFloat32Array()
-tracks/2/type = "position_3d"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("ModelHolder/Skeleton3D/high-polyMesh")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = PackedFloat32Array()
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_vwpgr"]
-_data = {
-&"pasos": SubResource("Animation_jlunn")
-}
-
-[node name="Player" type="CharacterBody3D"]
-script = ExtResource("1_vwpgr")
-
-[node name="CameraPivot" type="Node3D" parent="."]
-script = ExtResource("3_lkj05")
-
-[node name="Camera3D" type="Camera3D" parent="CameraPivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.46556, 0.816177, 2.39173)
-fov = 81.5625
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00902057, 0.168254, 0)
-shape = SubResource("CapsuleShape3D_kyqiw")
-
-[node name="RayCastFloor" type="RayCast3D" parent="."]
-target_position = Vector3(0, -1.2, 0)
-
-[node name="WeaponHolder" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0582796, 0.157863, 0)
-script = ExtResource("4_bxa8e")
-
-[node name="RifleModel" type="MeshInstance3D" parent="WeaponHolder"]
-
-[node name="Sketchfab_Scene" parent="WeaponHolder/RifleModel" instance=ExtResource("5_fdb16")]
-transform = Transform3D(-1.31134e-08, 0, 0.3, 0, 0.3, 0, -0.3, 0, -1.31134e-08, 0.296331, 0.011196, 0.00521064)
-
-[node name="SniperModel" type="MeshInstance3D" parent="WeaponHolder"]
-
-[node name="Sketchfab_Scene" parent="WeaponHolder/SniperModel" instance=ExtResource("6_5wh0k")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.269554, -0.011544, -0.326288)
-
-[node name="MeleeModel" type="MeshInstance3D" parent="WeaponHolder"]
-
-[node name="Sketchfab_Scene" parent="WeaponHolder/MeleeModel" instance=ExtResource("7_dxga8")]
-transform = Transform3D(-0.02, 0, -1.74846e-09, 0, 0.02, 0, 1.74846e-09, 0, -0.02, 0.253392, 0, 0)
-
-[node name="RayCast3D" type="RayCast3D" parent="WeaponHolder"]
-target_position = Vector3(0, 0, -5)
-
-[node name="Area3D" type="Area3D" parent="WeaponHolder"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WeaponHolder/Area3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.179422, 0.0277093, -0.49506)
-shape = SubResource("BoxShape3D_bhhdu")
+[node name="PlayerModel" type="Node3D"]
+script = ExtResource("1_hyrdf")
 
 [node name="ModelHolder" type="Node3D" parent="."]
 
@@ -682,16 +600,12 @@ bones/52/rotation = Quaternion(-0.27775, -0.0168838, -0.00442407, 0.960495)
 bones/52/scale = Vector3(1, 1, 1)
 
 [node name="playerbaseMesh" type="MeshInstance3D" parent="ModelHolder/Skeleton3D"]
-mesh = SubResource("ArrayMesh_jlunn")
-skin = SubResource("Skin_vwpgr")
+mesh = SubResource("ArrayMesh_hyrdf")
+skin = SubResource("Skin_pwkit")
 
 [node name="high-polyMesh" type="MeshInstance3D" parent="ModelHolder/Skeleton3D"]
-mesh = SubResource("ArrayMesh_m767r")
-skin = SubResource("Skin_lkj05")
+mesh = SubResource("ArrayMesh_qarfo")
+skin = SubResource("Skin_t8xl6")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_vwpgr")
-}
-
-[node name="AnimationTree" type="AnimationTree" parent="."]
+root_node = NodePath("")

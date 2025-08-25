@@ -71,7 +71,7 @@ offset_left = 1045.0
 offset_top = 620.0
 offset_right = 1144.0
 offset_bottom = 669.0
-text = "Version 0.0.2
+text = "Version 0.0.3
 "
 
 [connection signal="pressed" from="VBoxContainer/Button" to="." method="_on_perfil_pressed"]
