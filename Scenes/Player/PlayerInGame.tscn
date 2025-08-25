@@ -1,0 +1,46 @@
+[gd_scene load_steps=6 format=3 uid="uid://p42nkijr0k5y"]
+
+[ext_resource type="Script" uid="uid://cxe44nhjkdklu" path="res://Scenes/Player/PlayerInGame.gd" id="1_lvhtg"]
+[ext_resource type="Script" uid="uid://dm865irlpowc7" path="res://Scripts/CameraController.gd" id="2_o10j5"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_kyqiw"]
+height = 2.38214
+
+[sub_resource type="Animation" id="Animation_jlunn"]
+resource_name = "pasos"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_vwpgr"]
+_data = {
+&"pasos": SubResource("Animation_jlunn")
+}
+
+[node name="PlayerInGame" type="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.17673, 0)
+script = ExtResource("1_lvhtg")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.009, 0, 0)
+shape = SubResource("CapsuleShape3D_kyqiw")
+
+[node name="CameraPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.753553, 0.165154, -0.121732)
+script = ExtResource("2_o10j5")
+
+[node name="Camera3D" type="Camera3D" parent="CameraPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.10872, 0.413868, 1.80633)
+fov = 90.0
+
+[node name="RayCastFloor" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.09844, 0)
+target_position = Vector3(0, 0, 0)
+
+[node name="WeaponHolder" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.058, 0, 0)
+
+[node name="ModelHolder" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_vwpgr")
+}

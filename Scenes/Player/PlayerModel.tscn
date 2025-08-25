@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=4 uid="uid://c53c1ssitvf57"]
 
-[ext_resource type="Script" uid="uid://b3if3bxmvds5a" path="res://Scenes/Player/PlayerModel.gd" id="1_hyrdf"]
+[ext_resource type="Script" uid="uid://b3if3bxmvds5a" path="res://Scenes/Player/PlayerModel.gd" id="1_5e3dx"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n7efa"]
 resource_name = "playerbase"
@@ -221,7 +221,7 @@ bind/0/bone = -1
 bind/0/pose = Transform3D(1, 0, 0, 0, 1, 0.0007318, 0, -0.0007318, 1, 0, -17.604, -0.467612)
 
 [node name="PlayerModel" type="Node3D"]
-script = ExtResource("1_hyrdf")
+script = ExtResource("1_5e3dx")
 
 [node name="ModelHolder" type="Node3D" parent="."]
 

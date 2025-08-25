@@ -6,7 +6,7 @@ signal skin_changed(new_skin_index: int)
 # Configuración de skins
 # =========================
 var player_models: Array[String] = [
-	"res://scenes/PlayerModel.tscn"  # Modelo base para preview
+	"res://Scenes/Player/PlayerModel.tscn"  # Modelo base para preview
 ]
 
 # =========================
@@ -17,7 +17,7 @@ var current_model: Node3D
 var preview_root: Node3D
 
 var rotating_auto: bool = false
-var auto_rotation_speed: float = 0.01
+var auto_rotation_speed: float = 0.003
 
 # =========================
 # Referencias a nodos

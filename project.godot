@@ -18,7 +18,7 @@ config/icon="uid://de4xlmul2pfrm"
 
 [autoload]
 
-GameData="*res://autoload/GameData.gd"
+GameData="*res://GameData.gd"
 
 [input]
 

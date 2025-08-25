@@ -9,7 +9,7 @@ func _on_entrenar_pressed():
 	get_tree().change_scene_to_packed(scene)
 
 func _on_skin_pressed():
-	var scene = load("res://Scenes/CharacterSelectScreen.tscn") as PackedScene
+	var scene = load("res://Scenes/CharacterSelectScreen/CharacterSelectScreen.tscn") as PackedScene
 	get_tree().change_scene_to_packed(scene)
 
 
