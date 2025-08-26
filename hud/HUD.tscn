@@ -1,62 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://bodiky2uavi68"]
+[gd_scene load_steps=2 format=3 uid="uid://bodiky2uavi68"]
 
 [ext_resource type="Script" uid="uid://cmdy61gm83wcl" path="res://Scripts/Hud.gd" id="1_jo1ms"]
-[ext_resource type="Texture2D" uid="uid://dxus7w4qhjfw6" path="res://assets juego/Sin título-1.png" id="1_sd512"]
-[ext_resource type="Texture2D" uid="uid://b33vl5v3vkv44" path="res://assets juego/meleecross.png" id="3_psnte"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_entsu"]
-bg_color = Color(0.243569, 0.243569, 0.243569, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sd512"]
-bg_color = Color(0.282353, 0.882353, 0.12549, 1)
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_jo1ms")
-
-[node name="ProgressBar" type="ProgressBar" parent="."]
-offset_left = 28.0
-offset_top = 589.0
-offset_right = 314.0
-offset_bottom = 625.0
-theme_override_styles/background = SubResource("StyleBoxFlat_entsu")
-theme_override_styles/fill = SubResource("StyleBoxFlat_sd512")
-value = 100.0
-
-[node name="AmmoLabel" type="Label" parent="."]
-offset_left = 925.0
-offset_top = 552.0
-offset_right = 1059.0
-offset_bottom = 621.0
-theme_override_font_sizes/font_size = 50
-text = "30/30"
-
-[node name="Crosshair" type="TextureRect" parent="."]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("1_sd512")
-
-[node name="MeleeCrosshair" type="TextureRect" parent="."]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("3_psnte")
 
 [node name="KillFeedContainer" type="VBoxContainer" parent="."]
 anchors_preset = 1
@@ -65,34 +12,3 @@ anchor_right = 1.0
 offset_left = -40.0
 offset_bottom = 40.0
 grow_horizontal = 0
-
-[node name="HitMarkerLabel" type="Label" parent="."]
-visible = false
-offset_left = 919.0
-offset_top = 280.0
-offset_right = 963.0
-offset_bottom = 349.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 50
-text = "\"\""
-
-[node name="KillMarkerLabel" type="Label" parent="."]
-visible = false
-offset_left = 539.0
-offset_top = 376.0
-offset_right = 579.0
-offset_bottom = 399.0
-theme_override_colors/font_color = Color(1, 0, 0, 1)
-text = "\"\""
-
-[node name="DashLabel" type="Label" parent="."]
-offset_left = 563.0
-offset_top = 542.0
-offset_right = 603.0
-offset_bottom = 565.0
-
-[node name="SlideLabel" type="Label" parent="."]
-offset_left = 563.0
-offset_top = 587.0
-offset_right = 603.0
-offset_bottom = 610.0

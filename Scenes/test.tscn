@@ -14,8 +14,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.188052, 0)
 [node name="Marker3D" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 23.419)
 
-[node name="HUD" parent="." instance=ExtResource("3_qc4db")]
-
 [node name="PlayerInGame" parent="." instance=ExtResource("2_35xla")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.402734, 6.19704)
 
@@ -33,3 +31,5 @@ shape = SubResource("CapsuleShape3D_35xla")
 transform = Transform3D(1, 0, 0, 0, 0.833886, 0.551937, 0, -0.551937, 0.833886, 0, 14.9099, 21.984)
 
 [node name="Map" parent="." instance=ExtResource("1_i3aeo")]
+
+[node name="HUD" parent="." instance=ExtResource("3_qc4db")]

@@ -8,12 +8,10 @@ enum WeaponType { SNIPER = 1, RIFLE = 2, MELEE = 3 }
 # =========================
 # PROPIEDADES
 @export var weapon_type: WeaponType = WeaponType.RIFLE
-
 var damage: float
 var cooldown: float
 var max_ammo: int
 var current_ammo: int
-
 var can_fire = true
 var cooldown_timer = 0.0
 
@@ -33,35 +31,30 @@ var ammo_dict = {
 
 # =========================
 # REFERENCIAS
-@onready var raycast : RayCast3D = $RayCast3D
-@onready var melee_area : Area3D = $Area3D
-
-@onready var rifle_model : MeshInstance3D = $RifleModel
-@onready var sniper_model : MeshInstance3D = $SniperModel
-@onready var melee_model : MeshInstance3D = $MeleeModel
+@onready var raycast: RayCast3D = $RayCast3D
+@onready var melee_area: Area3D = $Area3D
+@onready var rifle_model: MeshInstance3D = $RifleModel
+@onready var sniper_model: MeshInstance3D = $SniperModel
+@onready var melee_model: MeshInstance3D = $MeleeModel
 
 @export var muzzle_flash_scene: PackedScene
 @export var impact_particles_scene: PackedScene
 
-@onready var camera: Camera3D = get_parent().get_node("CameraPivot/Camera3D")
-@onready var hud: Node = (
-	get_tree().current_scene.get_node("HUD") 
-	if get_tree().current_scene.has_node("HUD") 
-	else null
-)
+# Cámara y Player (se asignan en runtime desde PlayerInGame tras spawn)
+var camera: Camera3D = null
+var player_node: Node = null
+var hud: Node = null
 
-# NUEVO: referencia al Player
-var player_node : Node = null
-
-# FOV para apuntado (consistente con player.gd)
-var aim_fov: float = 70.0
+# =========================
+# PROPIEDAD SNIPER
+var is_aiming: bool = false
 
 # =========================
 # READY
 func _ready():
 	set_process(true)
 	update_weapon()
-	print("Weapon listo:", weapon_type, "Ammo:", current_ammo)
+	current_ammo = max_ammo
 
 # =========================
 # PROCESS
@@ -70,7 +63,7 @@ func _process(delta):
 		cooldown_timer -= delta
 		if cooldown_timer <= 0:
 			can_fire = true
-			cooldown_timer = 0
+			cooldown_timer = 0.0
 
 	if is_reloading:
 		reload_timer -= delta
@@ -120,55 +113,36 @@ func shoot_ray():
 	var ray_params = PhysicsRayQueryParameters3D.new()
 	ray_params.from = from
 	ray_params.to = to
-	ray_params.exclude = [player_node]  # Excluir player
+	if player_node:
+		ray_params.exclude = [player_node]
 
 	var result = space_state.intersect_ray(ray_params)
 
-	# --- Muzzle flash ---
+	# Muzzle flash
 	if muzzle_flash_scene:
 		var flash = muzzle_flash_scene.instantiate()
-		add_child(flash)
-		flash.global_transform.origin = raycast.global_transform.origin
+		get_tree().current_scene.add_child(flash)
+		flash.global_transform.origin = raycast.global_transform.origin if raycast else from
 		flash.one_shot = true
 		flash.emitting = true
 		flash.queue_free()
 
-	# --- Aplicar daño ---
+	# Impacto
 	if result:
 		var target = result.collider
 		if target != player_node and target.has_method("take_damage"):
 			target.take_damage(damage)
-
-			# --- Mostrar HIT ---
 			if hud and hud.has_method("show_hitmarker"):
 				hud.show_hitmarker()
 
-			# --- KILLFEED ---
-			if target.health <= 0 and hud:
-				var attacker_name = player_node.player_name if player_node and player_node.has_method("player_name") else player_node.name
-				var victim_name = target.name
-				var weapon_name = weapon_type_to_string(weapon_type)
-				hud.add_killfeed_message(weapon_name, victim_name, attacker_name)
-				if hud.has_method("show_killmarker"):
-					hud.show_killmarker()
-
+# =========================
+# FUNCION MELEE
 func swing_melee():
 	for body in melee_area.get_overlapping_bodies():
 		if body != player_node and body.has_method("take_damage"):
 			body.take_damage(damage)
-
-			# --- Mostrar HIT ---
 			if hud and hud.has_method("show_hitmarker"):
 				hud.show_hitmarker()
-
-			# --- KILLFEED ---
-			if body.health <= 0 and hud:
-				var attacker_name = player_node.player_name if player_node and player_node.has_method("player_name") else player_node.name
-				var victim_name = body.name
-				var weapon_name = weapon_type_to_string(weapon_type)
-				hud.add_killfeed_message(weapon_name, victim_name, attacker_name)
-				if hud.has_method("show_killmarker"):
-					hud.show_killmarker()
 
 # =========================
 # CAMBIO DE ARMA
@@ -200,37 +174,29 @@ func update_weapon():
 	else:
 		current_ammo = -1
 
-	if rifle_model:
-		rifle_model.visible = weapon_type == WeaponType.RIFLE
-	if sniper_model:
-		sniper_model.visible = weapon_type == WeaponType.SNIPER
-	if melee_model:
-		melee_model.visible = weapon_type == WeaponType.MELEE
+	# Modelos visibles
+	if rifle_model: rifle_model.visible = weapon_type == WeaponType.RIFLE
+	if sniper_model: sniper_model.visible = weapon_type == WeaponType.SNIPER
+	if melee_model: melee_model.visible = weapon_type == WeaponType.MELEE
 
 	update_hud_ammo()
+	is_aiming = false  # Reiniciar apuntado al cambiar arma
 
 # =========================
 # RECARGA
 func start_reload():
+	if weapon_type == WeaponType.MELEE or is_reloading:
+		return
 	is_reloading = true
 	reload_timer = reload_time
 
+# =========================
+# HUD
 func update_hud_ammo():
 	if hud:
-		var ammo_label = hud.get_node("AmmoLabel")
+		var ammo_label = hud.get_node_or_null("AmmoLabel")
 		if ammo_label:
 			if weapon_type == WeaponType.MELEE:
 				ammo_label.text = "-"
 			else:
 				ammo_label.text = str(current_ammo) + " / " + str(max_ammo)
-
-# =========================
-# AUX: Convertir WeaponType a nombre
-func weapon_type_to_string(type):
-	match type:
-		WeaponType.RIFLE:
-			return "Rifle"
-		WeaponType.SNIPER:
-			return "Sniper"
-		WeaponType.MELEE:
-			return "Melee"

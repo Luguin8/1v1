@@ -1,17 +1,27 @@
-extends CanvasLayer  # Script del HUD
+extends CanvasLayer
 
+# =========================
+# Nodos HUD
+# =========================
 @onready var killfeed_container = $KillFeedContainer
-@export var killfeed_duration := 3.0  # segundos que dura cada mensaje
+@export var killfeed_duration := 3.0
 @onready var hit_marker_label = $HitMarkerLabel
 @onready var kill_marker_label = $KillMarkerLabel  
 @onready var dash_label = $DashLabel
 @onready var slide_label = $SlideLabel
+@onready var cross = $Crosshair
+@onready var melee_cross = $MeleeCrosshair
+@onready var ammo_label = $AmmoLabel
+@onready var health_bar = $HealthBar
 
-var player_name = "Jugador"  # Nombre del jugador local
+var player_node: Node = null
+var player_name = "Jugador"
 
 func _ready():
+	# Obtener referencia al jugador si fue seteada como meta
+	if has_meta("player_node"):
+		player_node = get_meta("player_node")
 	load_player_name()
-	print("HUD listo. Nombre del jugador:", player_name)  # debug
 
 # --- Cargar nombre del jugador desde ConfigFile ---
 func load_player_name():
@@ -37,16 +47,11 @@ func show_killmarker() -> void:
 
 # --- Killfeed ---
 func add_killfeed_message(weapon_name: String, victim_name: String, attacker_name: String = ""):
-	# Si attacker_name no se pasa, usar el jugador local
 	if attacker_name == "":
 		attacker_name = player_name
-
-	# Crear label
 	var label = Label.new()
 	label.text = "%s [%s] -> %s" % [attacker_name, weapon_name, victim_name]
 	killfeed_container.add_child(label)
-
-	# Timer para eliminarlo después de killfeed_duration
 	var timer = Timer.new()
 	timer.wait_time = killfeed_duration
 	timer.one_shot = true

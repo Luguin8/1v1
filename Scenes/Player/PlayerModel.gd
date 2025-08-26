@@ -11,13 +11,11 @@ var selected_skin_index: int = 0
 
 # =========================
 # READY
-# =========================
 func _ready():
 	apply_skin(selected_skin_index)
 
 # =========================
 # Aplicar skin visual
-# =========================
 func apply_skin(index: int) -> void:
 	selected_skin_index = index
 
