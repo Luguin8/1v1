@@ -6,7 +6,7 @@ signal skin_changed(new_skin_index: int)
 # Configuración de skins
 # =========================
 var player_models: Array[String] = [
-	"res://Scenes/Player/PlayerModel.tscn"  # Modelo base para preview
+	"res://scenes/Player/PlayerModel.tscn"  # Modelo base para preview
 ]
 
 # =========================
@@ -137,7 +137,7 @@ func _on_confirm_pressed() -> void:
 	_show_alert("Skin guardada correctamente.", 1.6)
 
 func _on_volver_pressed() -> void:
-	var scene = load("res://Scenes/MainMenu.tscn") as PackedScene
+	var scene = load("res://scenes/MainMenu.tscn") as PackedScene
 	if scene: get_tree().change_scene_to_packed(scene)
 	else: push_error("MainMenu.tscn no encontrado")
 

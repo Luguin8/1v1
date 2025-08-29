@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://5ym5vc2btfp4"]
 
-[ext_resource type="Script" uid="uid://bfeeh1afyy2aa" path="res://Scenes/CharacterSelectScreen/CharacterSelectScreen.gd" id="1_u3rd5"]
+[ext_resource type="Script" uid="uid://bfeeh1afyy2aa" path="res://scenes/CharacterSelectScreen/CharacterSelectScreen.gd" id="1_u3rd5"]
 [ext_resource type="Texture2D" uid="uid://cvsghoayy6pbr" path="res://assets juego/assets_task_01k3d7ya6nf718nyk3rp64j64x_1756012509_img_1.webp" id="2_yvspx"]
 
 [node name="CharacterSelectScreen" type="Control"]

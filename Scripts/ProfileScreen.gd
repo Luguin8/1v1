@@ -90,7 +90,7 @@ func load_player_name():
 # Función para volver al menú principal
 # =========================
 func _on_volver_pressed() -> void:
-	var scene = load("res://Scenes/MainMenu.tscn") as PackedScene
+	var scene = load("res://scenes/MainMenu.tscn") as PackedScene
 	if scene:
 		get_tree().change_scene_to_packed(scene)
 	else:

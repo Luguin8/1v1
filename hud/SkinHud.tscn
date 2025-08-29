@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://b8dscaaje0er1"]
 
-[ext_resource type="Script" uid="uid://cmdy61gm83wcl" path="res://Scripts/Hud.gd" id="1_lbjdc"]
+[ext_resource type="Script" uid="uid://cmdy61gm83wcl" path="res://scripts/Hud.gd" id="1_lbjdc"]
 [ext_resource type="Texture2D" uid="uid://dxus7w4qhjfw6" path="res://assets juego/Sin título-1.png" id="2_1pqog"]
 [ext_resource type="Texture2D" uid="uid://b33vl5v3vkv44" path="res://assets juego/meleecross.png" id="3_f8h1m"]
 

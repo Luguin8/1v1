@@ -1,21 +1,21 @@
 [gd_scene load_steps=3 format=3 uid="uid://b7wrnnjk0m4jp"]
 
-[ext_resource type="Script" uid="uid://bf4e38o7qmhy8" path="res://Scripts/ProfileScreen.gd" id="1_r6fif"]
-[ext_resource type="Texture2D" uid="uid://dcxf00wm6h6dp" path="res://assets juego/assets_task_01k3d7ya6nf718nyk3rp64j64x_1756012509_img_0.webp" id="1_yfwcv"]
+[ext_resource type="Script" uid="uid://bf4e38o7qmhy8" path="res://scripts/ProfileScreen.gd" id="1_1mq2r"]
+[ext_resource type="Texture2D" uid="uid://dcxf00wm6h6dp" path="res://assets juego/assets_task_01k3d7ya6nf718nyk3rp64j64x_1756012509_img_0.webp" id="2_nc308"]
 
 [node name="ProfileScreen" type="Control"]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-script = ExtResource("1_r6fif")
+script = ExtResource("1_1mq2r")
 
 [node name="Fondo" type="TextureRect" parent="."]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 scale = Vector2(0.748906, 0.633252)
-texture = ExtResource("1_yfwcv")
+texture = ExtResource("2_nc308")
 
 [node name="Perfil del Jugador" type="Label" parent="."]
 layout_mode = 2

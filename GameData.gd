@@ -4,7 +4,7 @@ extends Node
 # Skins disponibles
 # =========================
 var player_models: Array[String] = [
-	"res://Scenes/Player/PlayerBase.tscn",  # Skin base
+	"res://scenes/Player/PlayerBase.tscn",  # Skin base
 	"res://scenes/player/skins/PlayerSkin1.tscn",
 	# "res://scenes/player/skins/PlayerSkin2.tscn",
 	# "res://scenes/player/skins/PlayerSkin3.tscn"

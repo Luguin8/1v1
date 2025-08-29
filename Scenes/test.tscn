@@ -1,10 +1,10 @@
 [gd_scene load_steps=7 format=3 uid="uid://c4fglhbpcuc72"]
 
-[ext_resource type="PackedScene" uid="uid://c4ro2gegb5jst" path="res://Scenes/mapTrainig.tscn" id="1_i3aeo"]
-[ext_resource type="PackedScene" uid="uid://p42nkijr0k5y" path="res://Scenes/Player/PlayerInGame.tscn" id="2_35xla"]
+[ext_resource type="PackedScene" uid="uid://c4ro2gegb5jst" path="res://scenes/mapTrainig.tscn" id="1_i3aeo"]
+[ext_resource type="PackedScene" uid="uid://p42nkijr0k5y" path="res://scenes/Player/PlayerInGame.tscn" id="2_35xla"]
 [ext_resource type="PackedScene" uid="uid://bodiky2uavi68" path="res://hud/HUD.tscn" id="3_qc4db"]
 [ext_resource type="PackedScene" uid="uid://cxwfmv7wh2mg8" path="res://assets juego/free__dummy_model.glb" id="4_35xla"]
-[ext_resource type="Script" uid="uid://dehndvacvcd3q" path="res://Scripts/dummy.gd" id="5_i3aeo"]
+[ext_resource type="Script" uid="uid://dehndvacvcd3q" path="res://scripts/dummy.gd" id="5_i3aeo"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_35xla"]
 

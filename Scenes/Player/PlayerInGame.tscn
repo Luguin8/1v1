@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://p42nkijr0k5y"]
 
-[ext_resource type="Script" uid="uid://cxe44nhjkdklu" path="res://Scenes/Player/PlayerInGame.gd" id="1_lvhtg"]
-[ext_resource type="Script" uid="uid://dm865irlpowc7" path="res://Scripts/CameraController.gd" id="2_o10j5"]
+[ext_resource type="Script" uid="uid://cxe44nhjkdklu" path="res://scenes/Player/PlayerInGame.gd" id="1_lvhtg"]
+[ext_resource type="Script" uid="uid://dm865irlpowc7" path="res://scripts/CameraController.gd" id="2_o10j5"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_kyqiw"]
 height = 2.38214

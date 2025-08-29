@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://c4ro2gegb5jst"]
 
 [ext_resource type="PackedScene" uid="uid://cwuxl2oqdt75c" path="res://assets juego/christmas_plaza_skatepark.glb" id="1_atflq"]
-[ext_resource type="Script" uid="uid://d1g72fd060sxe" path="res://Scripts/map.gd" id="2_v0cep"]
+[ext_resource type="Script" uid="uid://d1g72fd060sxe" path="res://scripts/map.gd" id="2_v0cep"]
 
 [node name="Map" instance=ExtResource("1_atflq")]
 script = ExtResource("2_v0cep")

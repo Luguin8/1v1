@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://b44h5y2qlqjca"]
 
-[ext_resource type="Script" uid="uid://dhky0713jjln1" path="res://Scripts/MainMenu.gd" id="1_853f1"]
-[ext_resource type="Texture2D" uid="uid://cnb0qdxxdcqf4" path="res://assets juego/assets_task_01k3d5myk1esf94mh5hqsmdyry_1756010108_img_1.webp" id="1_tt5f1"]
-[ext_resource type="Texture2D" uid="uid://de4xlmul2pfrm" path="res://assets juego/ICONO.png" id="3_8saeu"]
+[ext_resource type="Script" uid="uid://dhky0713jjln1" path="res://scripts/MainMenu.gd" id="1_2wh52"]
+[ext_resource type="Texture2D" uid="uid://cnb0qdxxdcqf4" path="res://assets juego/assets_task_01k3d5myk1esf94mh5hqsmdyry_1756010108_img_1.webp" id="2_ow34m"]
+[ext_resource type="Texture2D" uid="uid://de4xlmul2pfrm" path="res://assets juego/ICONO.png" id="3_l72w3"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -11,14 +11,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_853f1")
+script = ExtResource("1_2wh52")
 
 [node name="Fondo" type="TextureRect" parent="."]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 scale = Vector2(0.749741, 0.632574)
-texture = ExtResource("1_tt5f1")
+texture = ExtResource("2_ow34m")
 stretch_mode = 4
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
@@ -62,7 +62,7 @@ offset_top = 8.0
 offset_right = 929.0
 offset_bottom = 48.0
 scale = Vector2(5.23612, 5.23612)
-texture = ExtResource("3_8saeu")
+texture = ExtResource("3_l72w3")
 expand_mode = 1
 
 [node name="Version" type="Label" parent="."]

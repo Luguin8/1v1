@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=4 uid="uid://c53c1ssitvf57"]
 
-[ext_resource type="Script" uid="uid://b3if3bxmvds5a" path="res://Scenes/Player/PlayerModel.gd" id="1_5e3dx"]
+[ext_resource type="Script" uid="uid://b3if3bxmvds5a" path="res://scenes/Player/PlayerModel.gd" id="1_5e3dx"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n7efa"]
 resource_name = "playerbase"

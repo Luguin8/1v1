@@ -1,14 +1,14 @@
 [gd_scene load_steps=3 format=3 uid="uid://nc8xsj2kbjcw"]
 
-[ext_resource type="Script" uid="uid://bnni7stslwevt" path="res://Scripts/Weapon.gd" id="1_qv81b"]
-[ext_resource type="PackedScene" uid="uid://c2m2xosexdg6d" path="res://Assets/Models/low_poly_ak12.glb" id="2_e1ly8"]
+[ext_resource type="Script" uid="uid://bnni7stslwevt" path="res://scripts/Weapon.gd" id="1_uxn4k"]
+[ext_resource type="PackedScene" uid="uid://c2m2xosexdg6d" path="res://assets/models/low_poly_ak12.glb" id="2_bmw2d"]
 
 [node name="Weapon" type="Node3D"]
-script = ExtResource("1_qv81b")
+script = ExtResource("1_uxn4k")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 
-[node name="Sketchfab_Scene" parent="MeshInstance3D" instance=ExtResource("2_e1ly8")]
+[node name="Sketchfab_Scene" parent="MeshInstance3D" instance=ExtResource("2_bmw2d")]
 
 [node name="RayCast3D" type="RayCast3D" parent="."]
 target_position = Vector3(0, 0, -5)

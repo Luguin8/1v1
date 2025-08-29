@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cam7o2bi6mucr"]
 
 [ext_resource type="PackedScene" uid="uid://e0wclpp1iv8" path="res://assets juego/botanical_garden.glb" id="1_k7481"]
-[ext_resource type="Script" uid="uid://c44l1oj6rgwqq" path="res://Scripts/botanical_map.gd" id="2_7btbm"]
+[ext_resource type="Script" uid="uid://c44l1oj6rgwqq" path="res://scripts/botanical_map.gd" id="2_7btbm"]
 
 [node name="BotanicalMap" instance=ExtResource("1_k7481")]
 script = ExtResource("2_7btbm")

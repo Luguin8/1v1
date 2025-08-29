@@ -1,15 +1,15 @@
 extends Control
 
 func _on_perfil_pressed():
-	var scene = load("res://Scenes/ProfileScreen.tscn") as PackedScene
+	var scene = load("res://scenes/ProfileScreen.tscn") as PackedScene
 	get_tree().change_scene_to_packed(scene)
 
 func _on_entrenar_pressed():
-	var scene = load("res://Scenes/test.tscn") as PackedScene
+	var scene = load("res://scenes/test.tscn") as PackedScene
 	get_tree().change_scene_to_packed(scene)
 
 func _on_skin_pressed():
-	var scene = load("res://Scenes/CharacterSelectScreen/CharacterSelectScreen.tscn") as PackedScene
+	var scene = load("res://scenes/CharacterSelectScreen/CharacterSelectScreen.tscn") as PackedScene
 	get_tree().change_scene_to_packed(scene)
 
 
