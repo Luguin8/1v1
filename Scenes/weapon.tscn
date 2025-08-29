@@ -1,10 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://nc8xsj2kbjcw"]
+[gd_scene load_steps=3 format=3 uid="uid://xnlpv0fncsqw"]
 
-[ext_resource type="Script" uid="uid://bnni7stslwevt" path="res://scripts/Weapon.gd" id="1_uxn4k"]
 [ext_resource type="PackedScene" uid="uid://c2m2xosexdg6d" path="res://assets/models/low_poly_ak12.glb" id="2_bmw2d"]
 
+[sub_resource type="GDScript" id="GDScript_dfsph"]
+
 [node name="Weapon" type="Node3D"]
-script = ExtResource("1_uxn4k")
+script = SubResource("GDScript_dfsph")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 

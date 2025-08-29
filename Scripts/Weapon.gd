@@ -53,12 +53,17 @@ func set_aiming(value: bool) -> void:
 	is_aiming = value
 
 # =========================
+# Referencias muzzle flash
+@export var muzzle_point_path: NodePath  # Arrastrar el Node3D "muzzlepoint" en el inspector
+var muzzle_point: Node3D
+
 # READY
 func _ready():
 	set_process(true)
 	update_weapon()
 	current_ammo = max_ammo
-
+	if muzzle_point_path != null:
+		muzzle_point = get_node(muzzle_point_path)
 # =========================
 # PROCESS
 func _process(delta):
@@ -104,9 +109,11 @@ func fire():
 # =========================
 # FUNCIONES DE DISPARO
 func shoot_ray():
+	print("Flash emit")
 	if not camera:
 		return
 
+	# Raycast desde el centro de la pantalla
 	var viewport = get_viewport()
 	var screen_center = viewport.get_visible_rect().size / 2
 	var from = camera.project_ray_origin(screen_center)
@@ -121,16 +128,19 @@ func shoot_ray():
 
 	var result = space_state.intersect_ray(ray_params)
 
-	# Muzzle flash
-	if muzzle_flash_scene:
-		var flash = muzzle_flash_scene.instantiate()
-		get_tree().current_scene.add_child(flash)
-		flash.global_transform.origin = raycast.global_transform.origin if raycast else from
-		flash.one_shot = true
-		flash.emitting = true
-		flash.queue_free()
+	# ===== Muzzle flash =====
+	if muzzle_point and muzzle_flash_scene:
+		var flash_instance = muzzle_flash_scene.instantiate() as CPUParticles3D
+		flash_instance.global_transform = muzzle_point.global_transform
+		get_tree().current_scene.add_child(flash_instance)
+		flash_instance.restart()
+		flash_instance.one_shot = true
+		flash_instance.lifetime = 0.3
+		flash_instance.emitting = true
+		flash_instance.finished.connect(Callable(flash_instance, "queue_free"))
 
-	# Impacto
+
+	# ===== Impacto =====
 	if result:
 		var target = result.collider
 		if target != player_node and target.has_method("take_damage"):
