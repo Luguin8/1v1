@@ -290,6 +290,19 @@ func _physics_process(delta):
 			is_slide_on_cd = false
 
 # =========================
+# Apuntado click derecho sniper
+func is_aiming() -> bool:
+	if weapon:
+		#case1: arma tiene el metodo
+		if weapon.has_method("is_aiming"):
+			return weapon.is_aiming()
+		#case2: si el arma solo tiene la propiedad
+		elif "is_aiming" in weapon:
+			print("Aiming:", weapon.is_aiming)
+			return weapon.is_aiming
+	return false
+
+# =========================
 # PROCESS: visual y HUD
 func _process(delta):
 	# Flash visual de daño
@@ -328,6 +341,16 @@ func _process(delta):
 			weapon.switch_weapon(WeaponType.SNIPER)
 		elif Input.is_action_just_pressed("weapon_melee") and weapon and weapon.has_method("switch_weapon"):
 			weapon.switch_weapon(WeaponType.MELEE)
+	# Actualizar estado de apuntado
+	if weapon:
+		var aiming_input = Input.is_action_pressed("aim")
+		weapon.set_aiming(aiming_input)
+	# Manejar apuntado SOLO para sniper
+	if _is_local_player() and weapon:
+		if weapon.weapon_type == WeaponType.SNIPER:
+			weapon.set_aiming(Input.is_action_pressed("aim"))
+		else:
+			weapon.set_aiming(false)
 
 	# Actualizar cooldowns en HUD
 	if dash_label_ref:

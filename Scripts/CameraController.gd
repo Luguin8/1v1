@@ -50,10 +50,8 @@ func _process(delta):
 		return  # Si el Player no tiene la propiedad, no hacer nada
 
 	var aiming = false
-	if player.has_method("is_aiming"):
-		aiming = player.is_aiming
-	elif player.has("is_aiming"):
-		aiming = player.is_aiming
+	if player:
+		aiming = player.is_aiming()
 
 	# Zoom de posición hacia la mira
 	var target_pos = aim_position if aiming else default_position

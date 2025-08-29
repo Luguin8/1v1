@@ -49,6 +49,9 @@ var hud: Node = null
 # PROPIEDAD SNIPER
 var is_aiming: bool = false
 
+func set_aiming(value: bool) -> void:
+	is_aiming = value
+
 # =========================
 # READY
 func _ready():
